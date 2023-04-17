@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>MVVM模型</title>
+
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!--
+        MVVM模型
+            M: 模型（Model）：data中的数据
+            V: 视图（View）：模板代码
+            VM: 视图模型（ViewModel）: Vue实例
+
+        观察发现：
+            1. data中所有的属性，最后都出现在 Vue 实例上
+            2. Vue实例上所有的属性，及Vue原型上所有属性，在Vue模板中都可以直接使用
+    -->
+
+    <!-- 提供一个容器 -->
+    <div id="root">
+        <h1>学校名称：{{name}}</h1>
+        <h1>学校地址：{{address}}</h1>
+
+        <h1>测试1: {{1+1}}</h1>
+        <!-- 获取Vue对象中的值 -->
+        <h1>测试2: {{$options}}</h1>
+        <h1>测试3: {{$emit}}</h1>
+        <h1>测试4: {{_c}}</h1>
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false
+
+        // 创建Vue实例
+        const x = new Vue({
+            el: '#root',
+            data: {
+                name: "尚硅谷",
+                address: "杭州"
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
