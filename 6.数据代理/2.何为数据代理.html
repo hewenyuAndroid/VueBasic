@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>何为数据代理</title>
+
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        let obj1 = { x: 100 }
+        let obj2 = { y: 200 }
+
+        // 使用 obj2 对象代理 obj1 对象中的 x 属性
+        Object.defineProperty(obj2, 'x', {
+            get() {
+                return obj1.x
+            },
+            set(value) {
+                obj1.x = value
+            }
+        })
+
+        console.log(obj1)
+        console.log(obj2)
+
+    </script>
+
+</body>
+
+</html>
