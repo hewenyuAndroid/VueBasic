@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Object.defineProperty方法</title>
+
+</head>
+
+<body>
+
+    <script type="text/javascript">
+        // 定义变量
+        let number = 18
+
+        // 定义对象
+        let persion = {
+            name: "张三",
+            sex: "男"
+        }
+
+        // 给 persion 对象添加 age 属性
+        Object.defineProperty(persion, 'age', {
+
+            // // age 属性值为 18
+            // value: 18,
+            // // 控制属性是否可以枚举 (Object.keys)，默认是false 
+            // enumerable: true,
+            // // 控制属性值是否可以被修改，默认是false
+            // writable: true,
+            // // 控制属性是否可以被删除 (delete persion.age)，默认是false
+            // configurable: true
+
+            // 当有人读取 persion.age 属性时，get函数 (getter) 就会被调用，且返回值是 age 的值
+            // 可以简写: get(){}
+            get: function () {
+                console.log('读取了 age 属性')
+                return number
+            },
+
+            // 当有人设置 persion.age 属性时，set函数 (setter) 就会被调用，且会收到修改的具体值
+            set(value) {
+                console.log('修改了 age 属性，值为: ', value)
+                // 需要将 get 返回的数据更新
+                number = value
+            }
+
+        })
+
+        console.log(persion)
+
+    </script>
+
+</body>
+
+</html>
