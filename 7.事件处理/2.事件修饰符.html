@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>事件修饰符</title>
+
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+
+    <style>
+        * {
+            margin-top: 20px;
+        }
+
+        .div_stop {
+            background-color: rebeccapurple;
+            height: 50px;
+        }
+
+        .div1 {
+            background-color: aqua;
+            height: 50px;
+        }
+
+        .div2 {
+            background-color: blueviolet;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!--
+        Vue中的事件修饰符
+            1.prevent: 阻止默认事件（常用）
+            2.stop：阻止事件冒泡（常用）
+            3.once：事件只触发一次（常用）
+            4.capture：使用事件的捕获模式
+            5.self：只有event.target是当前操作的元素时才触发事件
+            6.passive：事件的默认行为立即执行，无需等待事件回调执行完毕
+    -->
+
+    <!-- 提供一个容器 -->
+    <div id="root">
+        <h1>欢迎来到 {{name}} 学习</h1>
+        <!-- 阻止默认事件（常用） -->
+        <a href="http://www.atguigu.com" @click.prevent="showInfo()">点我提示信息</a>
+        <!-- 阻止事件冒泡（常用）-->
+        <div class="div_stop" @click="showInfo2($event, 'from div')">
+            <button @click.stop="showInfo2($event, 'from button')">阻止事件冒泡</button>
+        </div>
+        <!-- 事件只触发一次 -->
+        <button @click.once="showInfo2($event, 'from button')">事件只触发一次</button>
+        <!-- 使用事件的捕获模式,在事件向里面传递时处理事件 -->
+        <div class="div1" @click.capture="showInfo2($event, 'div1')">
+            div1
+            <div class="div2" @click="showInfo2($event, 'div2')">
+                div2
+            </div>
+        </div>
+        <!-- 只有event.target是当前操作的元素时才触发事件 -->
+        <div class="div_stop" @click.self="showInfo2($event, 'from div')">
+            <button @click="showInfo2($event, 'from button')">只有event.target是当前操作的元素时才触发事件</button>
+        </div>
+
+        <!-- 事件的默认行为立即执行，无需等待事件回调执行完毕 -->
+        
+
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false
+
+        // 创建Vue实例
+        const x = new Vue({
+            el: '#root',
+            data: {
+                name: "尚硅谷"
+            },
+            methods: {
+                showInfo(event) {
+                    // 阻止默认事件方式1
+                    // event.prevent
+                    alert("showInfo")
+                },
+                showInfo2(event, msg) {
+                    // 阻止事件冒泡方式1
+                    // event.stopPropagation()
+                    alert('showInfo2, ' + msg)
+                }
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
