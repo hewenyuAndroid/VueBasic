@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>天气案例</title>
+
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!-- 提供一个容器 -->
+    <div id="root">
+        <!-- 使用表达式 -->
+        <h2>今天天气很{{isHot ? '炎热' : '凉爽'}}</h2>
+        <!-- 使用计算属性 -->
+        <h2>今天天气很{{info}}</h2>
+
+        <button @click="changeWather">切换天气</button>
+        <!-- 直接写表达式 -->
+        <button @click="isHot = !isHot">切换天气2</button>
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false
+
+        new Vue({
+            el: "#root",
+            data: {
+                isHot: true
+            },
+            computed: {
+                // 计算属性简写
+                info() {
+                    return this.isHot ? '炎热' : '凉爽'
+                }
+            },
+            methods: {
+                changeWather() {
+                    console.log('changeWather(): original isHot=', this.isHot)
+                    this.isHot = !this.isHot
+                }
+            },
+        })
+
+    </script>
+
+</body>
+
+</html>
