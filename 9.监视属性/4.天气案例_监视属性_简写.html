@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>天气案例_监视属性_简写</title>
+
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!-- 提供一个容器 -->
+    <div id="root">
+        <!-- 使用表达式 -->
+        <h2>今天天气很{{isHot ? '炎热' : '凉爽'}}</h2>
+        <!-- 使用计算属性 -->
+        <h2>今天天气很{{info}}</h2>
+
+        <button @click="changeWather">切换天气</button>
+
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false
+
+        const vm = new Vue({
+            el: "#root",
+            data: {
+                isHot: true,
+                isHot2: true
+            },
+            computed: {
+                // 计算属性简写
+                info() {
+                    return this.isHot ? '炎热' : '凉爽'
+                }
+            },
+            methods: {
+                changeWather() {
+                    console.log('changeWather(): original isHot=', this.isHot)
+                    this.isHot = !this.isHot
+                    this.isHot2 = !this.isHot2
+                }
+            },
+            watch: {
+                // 正常写法
+                // isHot: {
+                //     // 初始化时，让handler执行一次
+                //     // immediate: true,
+                //     // 深度监视
+                //     // deep: true
+                //     // handler什么时候执行： 当 isHot 发生改变时
+                //     handler(newValue, oldValue) {
+                //         console.log('isHot发生变化, newValue=', newValue, ' oldValue=', oldValue)
+                //     }
+                // }
+
+                // 简写
+                isHot(newValue, oldValue) {
+                    console.log('isHot发生变化, newValue=', newValue, ' oldValue=', oldValue)
+                }
+
+            }
+        })
+
+        // 正常写法
+        // vm.$watch('isHot2', {
+        //     handler(newValue, oldValue) {
+        //         console.log('isHot2发生变化, newValue=', newValue, ' oldValue=', oldValue)
+        //     }
+        // })
+
+        // 简写
+        vm.$watch('isHot2', function (newValue, oldValue) {
+            console.log('isHot2发生变化, newValue=', newValue, ' oldValue=', oldValue)
+        })
+
+    </script>
+
+</body>
+
+</html>
