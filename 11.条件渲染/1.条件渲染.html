@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>条件渲染</title>
+
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!--
+        条件渲染：
+            1. v-if
+                写法：
+                    1. v-if="表达式"
+                    2. v-else-if="表达式"
+                    3. v-else
+                适用于：切换频率较低的场景
+                特点：不展示的 dom 元素直接被移除
+                注意：v-if 可以和 v-else-if 、v-else 一起使用，但要求结构不能被打断
+
+            2. v-show
+                写法：v-show="表达式"
+                适用于：切换频率较高的场景
+                特点：不展示的 dom 元素未被移除，仅仅是使用样式隐藏掉
+
+            3. 备注：使用 v-if 时，元素可能无法获取到，而是用 v-show 一定可以获取到
+    -->
+
+    <!-- 提供一个容器 -->
+    <div id="root">
+
+        <!-- 使用v-show做渲染 -->
+        <h2 v-show="false">v-show={{name}}</h2><br />
+        <h2 v-show="1 === 1">v-show={{name}}</h2><br />
+        <h2 v-show="isShow">v-show={{name}}</h2><br />
+
+        <!-- 使用 v-if 做渲染 -->
+        <h2 v-if="true">v-if={{name}}</h2><br />
+        <h2 v-if="1 === 2">v-if={{name}}</h2><br />
+
+
+        <h2>当前value={{value}}</h2><br />
+        <button @click="value++">点击value+1</button>
+
+        <!-- <h2 v-show="value==1">java</h2><br />
+        <h2 v-show="value==2">kotlin</h2><br />
+        <h2 v-if="value==3">c++</h2><br /> -->
+
+        <br />
+
+        <!-- v-else 和 v-else-if ，此时三个div需要连续，中间不能加入其它组件，例如：<br/> -->
+        <!-- <h2 v-if="value === 1">java1</h2>
+        <h2 v-else-if="value === 2">kotlin1</h2>
+        <h2 v-else>c++1</h2> -->
+
+        <!-- template 包裹的标签，在渲染时，会去掉template直接加载，template只能配合 v-if 使用 -->
+        <template v-if="value==1">
+            <h2>java2</h2>
+            <h2>kotlin2</h2>
+            <h2>c++2</h2>
+        </template>
+
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false
+
+        new Vue({
+            el: "#root",
+            data: {
+                name: 'aaaaa',
+                isShow: true,
+                value: 0
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
