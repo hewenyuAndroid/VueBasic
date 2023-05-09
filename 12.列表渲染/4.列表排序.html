@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>列表排序</title>
+
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!-- 提供一个容器 -->
+    <div id="root">
+        <h2>人员列表</h2>
+
+        <input type="text" placeholder="请输入名字" v-model="keywords">
+
+        <button @click="sortType = 2">年龄升序</button>
+        <button @click="sortType = 1">年龄降序</button>
+        <button @click="sortType = 0">原顺序</button>
+
+        <!-- 遍历数组，使用计算属性实现 -->
+        <ul>
+            <li v-for="(p,index) in computedFilter" :key="p.id">
+                {{p.id}} - {{p.name}} - {{p.age}}
+            </li>
+        </ul>
+
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false
+
+        new Vue({
+            el: "#root",
+            data: {
+                keywords: '',
+                sortType: 0,    // 0:原顺序 1:年龄降序 2:年龄升序
+                persons: [
+                    { id: '0001', name: '马冬梅', age: '10' },
+                    { id: '0002', name: '周冬雨', age: '20' },
+                    { id: '0003', name: '周杰伦', age: '40' },
+                    { id: '0004', name: '温兆伦', age: '25' },
+                ],
+            },
+            computed: {
+                computedFilter() {
+                    // 计算属性的返回
+                    const tempPersons = this.persons.filter((p) => {
+                        // 过滤函数的返回
+                        return p.name.indexOf(this.keywords) !== -1
+                    })
+                    if (this.sortType != 0) {
+                        // 排序改变原数组
+                        tempPersons.sort((p1, p2) => {
+                            return this.sortType === 1 ? p2.age - p1.age : p1.age - p2.age
+                        })
+                    }
+
+                    return tempPersons
+                }
+            }
+        })
+    </script>
+
+</body>
+
+</html>
