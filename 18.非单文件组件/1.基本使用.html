@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>非单文件组件-基本使用</title>
+
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!--
+        Vue中使用组件的三大步骤:
+            1. 定义组件 (创建组件)
+            2. 注册组件
+            3. 使用组件 (写组件标签)
+
+        1. 如何定义一个组件?
+            使用 Vue.extend(options) 创建，其中 options 和 new Vue(options) 时传入的 options 几乎一样，区别如下:
+            - el不需要写, 因为 最终所有的组件都要经过一个vm的管理，由 vm 中的 el 决定服务哪个容器。
+            - data 必须协程函数，避免组件被复用时，引用的是同一个 data 对象。
+            备注: template 可以配置组件结构。
+
+        2. 如何注册组件?
+            1. 局部注册: new Vue({components:{ 组件key:组件对象，组件key(key-value名称一致时简写) }})
+            2. 全局注册: Vue.component('组件名称', 组件对象)
+
+        3. 使用组件标签
+            <school></school>
+    -->
+
+    <!-- 准备好一个容器 -->
+    <div id="root">
+        <h2>学校名称: {{schoolName}}</h2>
+        <h2>学校地址: {{schoolAddress}}</h2>
+        <br />
+        <h2>学生名称: {{studentName}}</h2>
+        <h2>学生年龄: {{studentAge}}</h2>
+
+        <br />
+
+        <!-- 组件方式 -->
+        <!-- 步骤三: 使用组件 -->
+        <h2>组件方式------------------------------------</h2>
+        <xuexiao></xuexiao>
+        <student></student>
+
+        <br />
+    </div>
+
+    <br />
+    <h2>第二个vm实例对象--------------------------------</h2>
+
+    <div id="root2">
+        <!-- 步骤三: 使用组件-->
+        <xuexiao></xuexiao>
+        <student></student>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    // 步骤1: 创建组件对象
+    const school = Vue.extend({
+        // 组件的 html 模板
+        template: `
+            <div>
+                <h2>学校名称: {{name}}</h2>
+                <h2>学校地址: {{address}}</h2>    
+                <button @click="showAddress()">点击显示弹窗</button>
+            </div>
+        `,
+        // 组件的data必须写成函数
+        data() {
+            return {
+                name: 'ccsu',
+                address: 'hangzhou'
+            }
+        },
+        methods: {
+            'showAddress': function () {
+                console.log('-->perform school.show().')
+                aler("showAddress.")
+            }
+        }
+    })
+
+    const student = Vue.extend({
+        template: `
+            <div>
+                <h2>学生名称: {{name}}</h2>
+                <h2>学生年龄: {{age}}</h2>    
+            </div>
+        `,
+        data() {
+            return {
+                name: 'zhangsan',
+                age: 20
+            }
+        }
+    })
+
+
+    // 步骤二: 全局注册组件
+    Vue.component('student', student)
+
+    new Vue({
+        el: '#root',
+        data: {
+            schoolName: "ccsu",
+            schoolAddress: "hangzhou",
+            studentName: 'zhangsan',
+            studentAge: 20
+        },
+        components: {
+            // 步骤二: 局部注册组件 (key为组件使用的名称，value为组件对象，key-value名称相同时，可以简写为一个key)
+            xuexiao: school
+        }
+    })
+
+    // 创建第二个vm对象
+    new Vue({
+        el: '#root2',
+        components: {
+            // 步骤二: 局部注册组件
+            xuexiao: school
+        }
+    })
+</script>
+
+</html>
