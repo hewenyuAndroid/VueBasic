@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>过滤器</title>
+
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <!--
+        https://www.bootcdn.cn/dayjs/
+    -->
+    <script type="text/javascript" src="../js/dayjs.min.js"></script>
+</head>
+
+<body>
+
+    <!--
+        过滤器
+            定义: 对要显示的数据进行特定格式化后再显示(适用于一些简单的逻辑处理)
+            语法:
+                1. 注册过滤器: Vue.filter(name, callback) 或 new Vue{filters:{name(value){}}}
+                2. 使用过滤器: {{ xxx | 过滤器名 }} 或 v-bind:属性= "xxx | 过滤器名"
+            备注:
+                1. 过滤器也可以接收额外参数，多个过滤器可以串联
+                2. 过滤器并没有改变原本的数据，是产生新的对应的数据；
+    -->
+
+    <!-- 提供一个容器 -->
+    <div id="root">
+        <h2>显示格式化后的时间</h2>
+        <h2>时间戳: {{time}}</h2>
+        <!--计算属性实现-->
+        <h3>现在是:{{fmtTime}}</h3><br />
+        <!--method实现-->
+        <h3>现在是:{{getFmtTime()}}</h3><br />
+        <!--过滤器实现 下面的 | 表示管道-->
+        <h3>现在是:{{time | timeFmt}}</h3>
+        <!--过滤器实现 带参数-->
+        <h3>现在是:{{time | timeFmt("YYYY_MM_DD HH:mm:ss")}}</h3>
+        <!--过滤器实现 多个过滤器-->
+        <h3>现在是:{{time | timeFmt("YYYY_MM_DD HH:mm:ss") | mySlice}}</h3>
+        <!--过滤器实现 多个过滤器(全局过滤器)-->
+        <h3>现在是:{{time | timeFmt("YYYY_MM_DD HH:mm:ss") | globalSlice}}</h3>
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false
+
+        // 定义全局的过滤器
+        Vue.filter('globalSlice', function (value) {
+            return value.slice(0, 4)
+        })
+
+        new Vue({
+            el: "#root",
+            data: {
+                time: new Date(),
+            },
+            computed: {
+                fmtTime() {
+                    return dayjs(this.time).format("YYYY年MM月DD HH:mm:ss")
+                }
+            },
+            methods: {
+                getFmtTime() {
+                    return dayjs(this.time).format("YYYY年MM月DD HH:mm:ss")
+                }
+            },
+            filters: {  // 局部过滤器
+                // 过滤器
+                timeFmt(value, fmt = "YYYY年MM月DD HH:mm:ss") {
+                    console.log("过滤器:timeFmt value=", value)
+                    return dayjs(value).format(fmt)
+                },
+                // 截取字符串前四位
+                mySlice(value) {
+                    console.log("过滤器:mySlice value=", value)
+                    return value.slice(0, 4)
+                }
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
