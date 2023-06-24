@@ -24,6 +24,7 @@
         <!-- <h2 :style="{opacity:opacity}">Vue生命周期</h2> -->
         <!-- {opacity:opacity} key:value重名时可以简写为 {key} -->
         <h2 :style="{opacity}">Vue生命周期</h2>
+        <button @click="stop">点击停止定时器</button>
     </div>
 
 </body>
@@ -36,16 +37,24 @@
             opacity: 1
         },
         methods: {
-
+            stop(){
+                // 停止定时器
+                clearInterval(this.timer)
+            }
         },
         // Vue 完成模板的解析并把初始的真实的 DOM 元素放入页面后，调用 mounted() 函数 （挂载到DOM）
         mounted() {
             console.log('-->perform mounted().')
-            setInterval(() => {
+            this.timer = setInterval(() => {
                 // 这里的 this 是 vm 对象
                 this.opacity -= 0.01
                 if (this.opacity <= 0) this.opacity = 1
             }, 20)
+        },
+        beforeDestroy() {
+            console.log('-->perform beforeDestroy().')
+            // 在vm销毁之前关闭定时器
+            clearInterval(this.timer)
         },
     })
 
