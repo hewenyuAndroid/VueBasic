@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>v-pre指令</title>
+
+    <!-- 引入vue -->
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!--
+        v-pre指令:
+            1. 跳过其所在节点的编译过程
+            2. 可利用它跳过: 没有使用指令语法、没有使用插值语法的节点，会加快编译。
+    -->
+
+    <!-- 提供一个容器 -->
+    <div id="root">
+        <!-- 当前节点没有使用插值语法、指令语法，可以添加 v-pre 加快编译速度 -->
+        <h2 v-pre>Vue其实很简单</h2>
+        <!-- 当前节点使用了 插值语法，使用 v-pre 指令会跳过该节点的解析，从而导致 {{count}} 直接显示在页面上 -->
+        <h2 v-pre>当前的count值是: {{count}}</h2>
+        <!-- 当前节点使用了指令语法 @click, 使用 v-pre 指令会跳过该节点的解析，从而导致 count++ 指令不生效 -->
+        <button v-pre @click="count++">点我count++</button>
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false
+
+        new Vue({
+            el: "#root",
+            data: {
+                count: 3
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
