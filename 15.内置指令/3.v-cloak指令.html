@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>v-cloak指令</title>
+
+    <style>
+        [v-cloak] {
+            display: none;
+        }
+    </style>
+
+</head>
+
+<body>
+
+    <!--
+        v-cloak指令(没有值):
+            1. 本质上是一个特殊属性，Vue实例创建完毕并接管容器后，会删掉 v-cloak 属性;
+            2. 使用 css 配合 v-cloak 可以解决网速慢时，页面展示出 {{ xxx }} 插值模板的问题;
+    -->
+
+    <!-- 提供一个容器 -->
+    <div id="root">
+        <!-- v-cloak属性会在 vue 对象被加载后移除 -->
+        <h2 v-cloak>ths</h2>
+
+        <!-- 引入vue -->
+        <script type="text/javascript" src="../js/vue.js"></script>
+    </div>
+
+    <script type="text/javascript">
+        Vue.config.productionTip = false
+
+        new Vue({
+            el: "#root",
+            data: {
+                name: "ths"
+            }
+        })
+
+    </script>
+
+</body>
+
+</html>
