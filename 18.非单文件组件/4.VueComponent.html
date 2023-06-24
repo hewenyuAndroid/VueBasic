@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>非单文件组件-VueComponent</title>
+
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!--
+        关于 VueComponent:
+            1. school 组件本质是一个名为 VueComponent 的构造函数，且不是开发人员定义的，是 Vue.extend 生成的。
+
+            2. 我们只需要写 <school></school> 或 <school/> , Vue解析时，会帮我们创建 school 组件的实例对象。
+                即: Vue 帮我们执行 new VueComponent(options) .
+
+            3. 特别注意: 每次调用 Vue.entend，返回的都是一个全新的 VueComponent
+
+            4. 关于 this 指向:
+                1. 组件配置中:
+                    data函数，methods中的函数，watch中的函数，computed中的函数，他们的 this 均是 VueComponent 实例对象
+                2. new Vue() 配置中:
+                    data函数，methods中的函数，wtach中的函数，computed中的函数，他们的 this 均是 Vue 实例对象
+
+            5. VueComponent 的实例对象，以后简称 vc (也可以称之为: 组件实例对象)
+                Vue 的实例对象, 以后简称 vm
+    -->
+
+    <!-- 准备好一个容器 -->
+    <div id="root">
+        <school></school>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    // 定义school组件
+    const school = Vue.extend({
+        // 组件的 html 模板
+        template: `
+            <div>
+                <h2>学校名称: {{name}}</h2>
+                <h2>学校地址: {{address}}</h2>
+            </div>
+        `,
+        name: 'school',
+        data() {
+            return {
+                name: 'ccsu',
+                address: 'hangzhou'
+            }
+        },
+    })
+
+    // 输出组件到控制台
+    console.log('-->component=', school)
+
+    new Vue({
+        el: '#root',
+        components: {
+            school
+        }
+    })
+
+</script>
+
+</html>
