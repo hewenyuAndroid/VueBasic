@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>非单文件组件-几个注意点</title>
+
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!--
+        几个注意点:
+            1. 关于组件名:
+                一个单词组成:
+                    写法一 (首字母小写): school
+                    写法二 (首字母大写): School
+                多个单词组成:
+                    写法一 (kebab-case命名): my-school
+                    写法二 (CamelCase命名): MySchool （需要脚手架支持）
+                备注:
+                    1. 组件名尽可能回避 HTML 中已有元素名称, 例如: h2, H2等
+                    2. 可以使用 name 配置项指定组件在开发者工具中呈现的名称
+
+            2. 关于组件标签:
+                写法一: <school></school>
+                写法二: <school/>
+                备注: 不使用脚手架时， <school/> 会导致后续组件不能渲染.
+
+            3. 一个简写方式:
+                const school = Vue.extend(options) 可以简写为 const school = options
+    -->
+
+    <!-- 准备好一个容器 -->
+    <div id="root">
+        <h2>Vue中使用组件的注意点</h2>
+
+        <school></school>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    // 步骤1: 创建组件对象
+    const school = Vue.extend({
+        // 组件的 html 模板
+        template: `
+            <div>
+                <h2>学校名称: {{name}}</h2>
+                <h2>学校地址: {{address}}</h2>    
+                <button @click="showAddress()">点击显示弹窗</button>
+            </div>
+        `,
+        // name 属性用于指定 组件在开发者工具中的名称，默认不指定，使用 components 中配置的名称
+        name: "myschool",
+        // 组件的data必须写成函数
+        data() {
+            return {
+                name: 'ccsu',
+                address: 'hangzhou'
+            }
+        },
+        methods: {
+            'showAddress': function () {
+                console.log('-->perform school.show().')
+                alert("showAddress.")
+            }
+        }
+    })
+
+    new Vue({
+        el: '#root',
+        components: {
+            // 步骤二: 局部注册组件 (key为组件使用的名称，value为组件对象，key-value名称相同时，可以简写为一个key)
+            school
+        }
+    })
+
+</script>
+
+</html>
