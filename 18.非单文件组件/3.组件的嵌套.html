@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>非单文件组件-组件的嵌套</title>
+
+    <script type="text/javascript" src="../js/vue.js"></script>
+</head>
+
+<body>
+
+    <!-- 准备好一个容器 -->
+    <div id="root">
+        <h2>组件的嵌套</h2>
+        <app></app>
+    </div>
+
+</body>
+
+<script type="text/javascript">
+    Vue.config.productionTip = false
+
+    // 定义student组件
+    const student = {
+        template: `
+            <div>
+                <h2>学生姓名: {{name}}</h2>
+                <h2>学生年龄: {{age}}</h2>
+            </div>
+        `,
+        data() {
+            return {
+                name: 'zhangsan',
+                age: 20
+            }
+        }
+    }
+
+    // 定义school组件
+    const school = Vue.extend({
+        // 组件的 html 模板
+        template: `
+            <div>
+                <h2>学校名称: {{name}}</h2>
+                <h2>学校地址: {{address}}</h2>
+                <student></student>
+            </div>
+        `,
+        name: 'school',
+        data() {
+            return {
+                name: 'ccsu',
+                address: 'hangzhou'
+            }
+        },
+        components: {
+            // 将学生组件注册到 school 组件
+            // student 组件在 school 组件里面注册，就需要在 school 组件中使用
+            student: student
+        }
+    })
+
+    // 定义hello
+    const hello = Vue.extend({
+        // 组件的 html 模板
+        template: `
+            <div>
+                <h2>hello</h2>
+            </div>
+        `
+    })
+
+    // 定义 App 组件管理所有的组件
+    const app = Vue.extend({
+        // 组件的 html 模板
+        template: `
+            <div>
+                <hello></hello>
+                <school></school>
+            </div>
+        `,
+        components: {
+            // 将 app 组件作为跟组件，管理所有的组件
+            hello,
+            school
+        }
+    })
+
+
+    new Vue({
+        el: '#root',
+        components: {
+            // vm 对象只需要接收app组件即可
+            app
+        }
+    })
+
+</script>
+
+</html>
