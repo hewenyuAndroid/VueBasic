@@ -58,4 +58,71 @@
     - 添加 ref 标识 `<h2 ref="xxx">...</h2>` 或 `<School ref="xxx"></School>`
     - 获取 `this.$ref.xxx`
 
+# props 配置项
+
+1. 功能: 让组件接收外部传过来的数据
+2. 传递数据: `<Student name="xxx" :age="20"></Student>`
+3. 接收数据
+    1. 第一种方式 (只接收数据): `props:["name", "age"]`
+    2. 第二种方式 (限制接收的数据类型): `props: {name:String, age:Number}`
+    3. 第三种方式 (限制类型，限制必要性，指定默认值)
+    ```js
+    data(){
+        return {
+            // 1. data 中定义的属性名称不能和 props 中的相同
+            // 2. props 中的数据会在 data 数据之前被加载，因此可以使用 props 中的数据给 data 中的字段赋值
+            // 3. props 中的数据是只读的，可以将 props 中的数据 赋值给 data，然后使用data中的数据去显示和操作
+            showName:this.name
+        }
+    }
+    props: {
+        name: {
+            type:String,    // 限制类型为 String
+            required: true, // 必要性 （是否必传）
+            default:"zhangsan"  // 默认值
+        },
+        age: {
+            type:Number,    // 限制类型为 String
+            default: 20 // 默认值
+        }
+    }
+    ```
+
+备注: props 是只读的， Vue 底层会监测开发者对 props 的修改，如果进行了修改，会发出警告，若业务确实需要修改数据，则可以通过 复制 props 中的内容到 data 中，然后去修改 data 中的值;
+
+
+# mixin （混入/混合）
+
+1. 功能: 可以把多个组件共用的配置提取成一个混入对象
+2. 使用方式:
+    1. 定义混入
+    ```js
+    // xxx.js
+    {
+        // 组件引入混合后，data 中的属性 和 methods 中的函数会取并集
+        // 如果引入混入的组件中的 data 中的元素和methods中的函数有冲突，则优先使用 组件中的冲突属性/函数
+        data(){
+            return {
+                name:"zhangsan",
+                age:20,
+            }
+        },
+        methods:{
+            showName(){
+                ...
+            }
+        },
+        mounted() {
+            ....
+            // 如果引入混入的组件中也定义了对应的生命周期函数 mounted()
+            // 则: 两 mounted() 都会执行 （混入文件中的会先执行）
+        }，
+        ...
+    }
+    ```
+    2. 使用混入
+        - 全局使用: `Vue.mixin(xxx)`
+        - 局部使用: `mixins:["xxx"]`
+
+
 
