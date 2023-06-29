@@ -125,4 +125,48 @@
         - 局部使用: `mixins:["xxx"]`
 
 
+# 插件
+
+1. 功能: 用于增强Vue
+2. 本质: 包含 `install()` 方法的一个对象，`install()` 方法的第一个参数是 `Vue`，第二个以后的参数是插件使用者传递的数据。
+3. 定义插件:
+    ```js
+    对象.install = function (Vue, options) {
+        // 导入全局过滤器
+        Vue.filter("mySlice", function (value) {
+            return value.slice(0, 4)
+        })
+
+        // 添加全局指令
+        Vue.directive("fbind", {
+            //指令与元素成功绑定时（一上来）
+            bind(element, binding) {
+                element.value = binding.value
+            },
+            //指令所在元素被插入页面时
+            inserted(element, binding) {
+                element.focus()
+            },
+            //指令所在的模板被重新解析时
+            update(element, binding) {
+                element.value = binding.value
+            }
+        })
+
+        // 定义混入
+        Vue.mixin({
+            data() {
+                return {
+                    x: 1,
+                    y: 2,
+                }
+            }
+        })
+
+        // 给Vue原型上添加一个方法， (vm和vc就都能用了)
+        Vue.prototype.hello = () => { alert('你好啊') }
+    }
+    ```
+4. 使用插件: `Vue.use(plugins, options)`
+
 
