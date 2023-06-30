@@ -1,8 +1,10 @@
 <template>
   <li>
     <label>
-      <input type="checkbox" />
-      <span>xxxxx</span>
+      <!-- 复选框通过 done 字段判断是否默认选中 -->
+      <input type="checkbox" :checked="todo.done" />
+      <!-- 使用 props 接收到的数据显示 -->
+      <span>{{ todo.title }}</span>
     </label>
     <button class="btn btn-danger" style="display: none">删除</button>
   </li>
@@ -11,6 +13,7 @@
 <script>
 export default {
   name: "TodoItem",
+  props: ["todo"],
 };
 </script>
 
