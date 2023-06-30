@@ -1,8 +1,17 @@
 <template>
   <li>
     <label>
-      <!-- 复选框通过 done 字段判断是否默认选中 -->
-      <input type="checkbox" :checked="todo.done" />
+      <!-- 
+        复选框通过 done 字段判断是否默认选中
+        通过监听 复选框的 change 变更来通知 App 层数据的变更,传入当前数据的id
+     -->
+      <input
+        type="checkbox"
+        :checked="todo.done"
+        @change="updateChecked(todo.id)"
+      />
+      <!-- 如下方式也能实现功能，但是不太推荐，有点违反原则，因为修改了 props -->
+      <!-- <input type="checkbox" v-model="todo.done" /> -->
       <!-- 使用 props 接收到的数据显示 -->
       <span>{{ todo.title }}</span>
     </label>
@@ -13,7 +22,15 @@
 <script>
 export default {
   name: "TodoItem",
-  props: ["todo"],
+  // 接收 父组件传递过来的 数据和回调函数
+  props: ["todo", "onReceiveUpdateChecked"],
+  methods: {
+    updateChecked(value) {
+      console.log("perfrom updateChecked: id=", value);
+      // 执行回调函数，通知父组件数据变更
+      this.onReceiveUpdateChecked(value);
+    },
+  },
 };
 </script>
 

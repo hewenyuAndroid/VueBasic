@@ -5,7 +5,10 @@
         <!-- 在 App 层将 onReceiveTodo 函数传递给 TodoHeader 组件 -->
         <TodoHeader :onReceiveTodo="onReceiveTodo" />
         <!-- 在 App 层将 todos 列表传递给 TodoList 组件 -->
-        <TodoList :todos="todos" />
+        <TodoList
+          :todos="todos"
+          :onReceiveUpdateChecked="onReceiveUpdateChecked"
+        />
         <TodoFooter />
       </div>
     </div>
@@ -29,12 +32,23 @@ export default {
     };
   },
   methods: {
+    // 添加 todo 回调函数
     onReceiveTodo(value) {
       // 1. 接收到 todo 对象
       console.log("perfrom app addTodo method, value=", value);
       // 2. 插入数据到 todos 列表第一条
-      this.todos.unshift(value)
+      this.todos.unshift(value);
       // 3. vue感知到数据变更后，重新解析模板，此时 todos 已经变更，所以页面会刷新
+    },
+    // 复选框变更回调函数
+    onReceiveUpdateChecked(id) {
+      console.log("perfrom app onReceiveUpdateChecked: value=", id);
+      // 接收到 TodoItem 传过来的数据变更
+      this.todos.forEach((todo) => {
+        // 根据id找到数据，然后取反
+        if (todo.id === id) todo.done = !todo.done;
+      });
+      // 由于 todos 数据变更，vue会重新解析模板
     },
   },
 };
