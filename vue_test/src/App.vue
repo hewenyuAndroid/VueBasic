@@ -2,8 +2,10 @@
   <div id="root">
     <div class="todo-container">
       <div class="todo-wrap">
-        <TodoHeader />
-        <TodoList />
+        <!-- 在 App 层将 onReceiveTodo 函数传递给 TodoHeader 组件 -->
+        <TodoHeader :onReceiveTodo="onReceiveTodo" />
+        <!-- 在 App 层将 todos 列表传递给 TodoList 组件 -->
+        <TodoList :todos="todos" />
         <TodoFooter />
       </div>
     </div>
@@ -17,6 +19,24 @@ import TodoList from "./components/TodoList.vue";
 export default {
   name: "App",
   components: { TodoHeader, TodoFooter, TodoList },
+  data() {
+    return {
+      todos: [
+        { id: "001", title: "抽烟", done: true },
+        { id: "002", title: "喝酒", done: false },
+        { id: "003", title: "烫头", done: true },
+      ],
+    };
+  },
+  methods: {
+    onReceiveTodo(value) {
+      // 1. 接收到 todo 对象
+      console.log("perfrom app addTodo method, value=", value);
+      // 2. 插入数据到 todos 列表第一条
+      this.todos.unshift(value)
+      // 3. vue感知到数据变更后，重新解析模板，此时 todos 已经变更，所以页面会刷新
+    },
+  },
 };
 </script>
 
@@ -64,5 +84,4 @@ body {
   border: 1px solid #ddd;
   border-radius: 5px;
 }
-
 </style>
