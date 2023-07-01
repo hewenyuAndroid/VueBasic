@@ -15,7 +15,7 @@
       <!-- 使用 props 接收到的数据显示 -->
       <span>{{ todo.title }}</span>
     </label>
-    <button class="btn btn-danger" style="display: none">删除</button>
+    <button class="btn btn-danger" @click="removeTodo(todo.id)">删除</button>
   </li>
 </template>
 
@@ -23,12 +23,19 @@
 export default {
   name: "TodoItem",
   // 接收 父组件传递过来的 数据和回调函数
-  props: ["todo", "onReceiveUpdateChecked"],
+  props: ["todo", "onReceiveUpdateChecked", "onReceiveRemove"],
   methods: {
     updateChecked(value) {
       console.log("perfrom updateChecked: id=", value);
       // 执行回调函数，通知父组件数据变更
       this.onReceiveUpdateChecked(value);
+    },
+    // 点击删除todo
+    removeTodo(id) {
+      console.log("perfrom delete todo, id=", id);
+      if (confirm("是否确认删除?")) {
+        this.onReceiveRemove(id);
+      }
     },
   },
 };
@@ -68,5 +75,12 @@ li:before {
 
 li:last-child {
   border-bottom: none;
+}
+
+li:hover {
+  background-color: #ddd;
+}
+li:hover button {
+  display: block;
 }
 </style>

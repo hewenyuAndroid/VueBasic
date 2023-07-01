@@ -10,6 +10,7 @@
       :key="todoObj.id"
       :todo="todoObj"
       :onReceiveUpdateChecked="onReceiveUpdateChecked"
+      :onReceiveRemove="onReceiveRemove"
     />
   </ul>
 </template>
@@ -21,7 +22,7 @@ export default {
   name: "TodoList",
   components: { TodoItem },
   // 接收 App 层传递过来的数据和回调函数
-  props: ["todos", "onReceiveUpdateChecked"],
+  props: ["todos", "onReceiveUpdateChecked", "onReceiveRemove"],
 };
 </script>
 

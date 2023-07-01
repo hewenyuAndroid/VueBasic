@@ -8,6 +8,7 @@
         <TodoList
           :todos="todos"
           :onReceiveUpdateChecked="onReceiveUpdateChecked"
+          :onReceiveRemove="onReceiveRemove"
         />
         <TodoFooter />
       </div>
@@ -49,6 +50,13 @@ export default {
         if (todo.id === id) todo.done = !todo.done;
       });
       // 由于 todos 数据变更，vue会重新解析模板
+    },
+    // 删除todo事件回调
+    onReceiveRemove(id) {
+      console.log("perfrom app onReceive remove, id=", id);
+      // 过滤出 id 不相同的todo，然后重新给 todos 数组赋值
+      // todos数据变更，vue会重新解析模板
+      this.todos = this.todos.filter((todo) => todo.id !== id);
     },
   },
 };
