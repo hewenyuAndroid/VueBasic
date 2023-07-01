@@ -3,7 +3,9 @@
     <label>
       <input type="checkbox" />
     </label>
-    <span> <span>已完成0</span> / 全部2 </span>
+    <span>
+      <span>已完成{{ checkedCount }}</span> / 全部{{ todos.length }}
+    </span>
     <button class="btn btn-danger">清除已完成任务</button>
   </div>
 </template>
@@ -11,6 +13,23 @@
 <script>
 export default {
   name: "TodoFooter",
+  props: ["todos"],
+  computed: {
+    checkedCount() {
+      // // reduce 函数
+      // // pre: 上一次遍历的返回值
+      // // todo: 当前遍历的对象
+      // // 0: 从0开始计数
+      // return this.todos.reduce((pre, todo) => {
+      //   // 首次 pre=0
+      //   // 后续 done == true 时返回 pre+1 否则返回pre
+      //   return pre + (todo.done ? 1 : 0);
+      // }, 0);
+      
+      // 上述方式简写
+      return this.todos.reduce((pre, todo) => pre + (todo.done ? 1 : 0), 0);
+    },
+  },
 };
 </script>
 

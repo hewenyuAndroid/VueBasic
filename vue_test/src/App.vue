@@ -10,7 +10,7 @@
           :onReceiveUpdateChecked="onReceiveUpdateChecked"
           :onReceiveRemove="onReceiveRemove"
         />
-        <TodoFooter />
+        <TodoFooter :todos="todos" />
       </div>
     </div>
   </div>
