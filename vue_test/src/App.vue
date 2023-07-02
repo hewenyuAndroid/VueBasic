@@ -10,7 +10,11 @@
           :onReceiveUpdateChecked="onReceiveUpdateChecked"
           :onReceiveRemove="onReceiveRemove"
         />
-        <TodoFooter :todos="todos" />
+        <TodoFooter
+          :todos="todos"
+          :clearAll="clearAll"
+          :clearCheckedTodo="clearCheckedTodo"
+        />
       </div>
     </div>
   </div>
@@ -57,6 +61,18 @@ export default {
       // 过滤出 id 不相同的todo，然后重新给 todos 数组赋值
       // todos数据变更，vue会重新解析模板
       this.todos = this.todos.filter((todo) => todo.id !== id);
+    },
+    clearAll(value) {
+      console.log("perfrom app clear, checked=", value);
+      // 将所有数据刷新成 value 参数对应的数据
+      this.todos.forEach((todo) => (todo.done = value));
+      // todos数据变更，vue会重新解析模板
+    },
+    clearCheckedTodo() {
+      console.log("perfrom app clearCheckedTodo");
+      // 过滤出所有非选中的todo重新赋值给 todos 列表
+      // todos数据变更，vue会重新解析模板
+      this.todos = this.todos.filter((todo) => !todo.done);
     },
   },
 };

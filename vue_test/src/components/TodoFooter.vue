@@ -1,19 +1,32 @@
 <template>
-  <div class="todo-footer">
+  <div class="todo-footer" v-show="totalCount">
     <label>
-      <input type="checkbox" />
+      <!-- 
+        方案1
+        checked 监听 isAll 数据来控制是否选中
+        click 控制点击事件来变更数据
+       -->
+      <!-- <input type="checkbox" :checked="isAll" @click="clearAllTodo" /> -->
+
+      <!-- 
+        方案2
+        使用 v-model
+      -->
+      <input type="checkbox" v-model="isAll" />
     </label>
     <span>
-      <span>已完成{{ checkedCount }}</span> / 全部{{ todos.length }}
+      <span>已完成{{ checkedCount }}</span> / 全部{{ totalCount }}
     </span>
-    <button class="btn btn-danger">清除已完成任务</button>
+    <button class="btn btn-danger" @click="clearCheckedTodo">
+      清除已完成任务
+    </button>
   </div>
 </template>
 
 <script>
 export default {
   name: "TodoFooter",
-  props: ["todos"],
+  props: ["todos", "clearAll", "clearCheckedTodo"],
   computed: {
     checkedCount() {
       // // reduce 函数
@@ -25,10 +38,33 @@ export default {
       //   // 后续 done == true 时返回 pre+1 否则返回pre
       //   return pre + (todo.done ? 1 : 0);
       // }, 0);
-      
+
       // 上述方式简写
       return this.todos.reduce((pre, todo) => pre + (todo.done ? 1 : 0), 0);
     },
+    // 返回所有todo的数量
+    totalCount() {
+      return this.todos.length;
+    },
+    // isAll() {
+    //   return this.checkedCount === this.totalCount;
+    // },
+    isAll: {
+      // 使用 方案2需要监听 isAll 的set函数
+      get() {
+        return this.checkedCount === this.totalCount;
+      },
+      set(value) {
+        console.log("isAll value=", value);
+        this.clearAll(value);
+      },
+    },
+  },
+  methods: {
+    // clearAllTodo(e) {
+    //   const checked = e.target.checked;
+    //   this.$props.clearAll(checked);
+    // },
   },
 };
 </script>
