@@ -1,146 +1,64 @@
 <template>
-  <div id="root">
-    <div class="todo-container">
-      <div class="todo-wrap">
-        <!-- 在 App 层将 onReceiveTodo 函数传递给 TodoHeader 组件 -->
-        <TodoHeader :onReceiveTodo="onReceiveTodo" />
-        <!-- 在 App 层将 todos 列表传递给 TodoList 组件 -->
-        <TodoList
-          :todos="todos"
-          :onReceiveUpdateChecked="onReceiveUpdateChecked"
-          :onReceiveRemove="onReceiveRemove"
-        />
-        <TodoFooter
-          :todos="todos"
-          :clearAll="clearAll"
-          :clearCheckedTodo="clearCheckedTodo"
-        />
-      </div>
-    </div>
+  <div class="app">
+    <h2>接收到数据: {{ msg }}</h2>
+    <br />
+    <!-- 通过父组件给子组件传递函数类型的 props 属性实现： 子组件给父组件传递数据 -->
+    <School :sendNameToApp="sendNameToApp" />
+    <br />
+    <!-- 通过父组件给子组件绑定一个自定义事件实现：子组件给父组件传递数据 -->
+    <!--
+      第一种写法，使用 v-on 或 @ 在子组件标签上添加自定义事件，事件触发时，执行标签对应的表达式
+      当子组件 触发 atguigu 自定义事件时，触发父组件中的 getStudentName 函数
+    -->
+    <!-- <Student v-on:atguigu="getStudentName" /> -->
+
+    <!-- 
+      第二种写法，使用 ref 引用拿到组件标签，在 mounted 回调函数中绑定事件
+     -->
+    <Student ref="student" />
   </div>
 </template>
 
 <script>
-import TodoHeader from "./components/TodoHeader.vue";
-import TodoFooter from "./components/TodoFooter.vue";
-import TodoList from "./components/TodoList.vue";
+import Student from "./components/Student.vue";
+import School from "./components/School.vue";
+
 export default {
   name: "App",
-  components: { TodoHeader, TodoFooter, TodoList },
+  components: { School, Student },
+  mounted() {
+    // 在组件被挂载时，绑定事件，事件只回调一次
+    // this.$refs.student.$once("atguigu", this.getStudentName);
+    // 在组件被挂载时，绑定事件，事件可以一直回调
+    this.$refs.student.$on("atguigu", this.getStudentName);
+    // 给 student 组件绑定多个事件
+    this.$refs.student.$on("testEvent", this.test);
+  },
   data() {
     return {
-      // todos: [
-      //   { id: "001", title: "抽烟", done: true },
-      //   { id: "002", title: "喝酒", done: false },
-      //   { id: "003", title: "烫头", done: true },
-      // ],
-      // todos 的数据默认从缓存中读取，通过 || 命令，如果缓存中不存在则使用一个 空数组
-      todos: JSON.parse(localStorage.getItem("todos")) || [],
+      msg: "",
     };
   },
-  watch: {
-    // 监视属性，监听 todos 数据的变更，简写方式，存在bug，内部数据变更无法监视到，导致数据状态不对
-    // todos(oldValue, newValue) {
-    //   console.log("--->watch todos change. newValue=", newValue);
-    //   // 将数据放到本地缓存
-    //   localStorage.setItem("todos", JSON.stringify(newValue));
-    // },
-
-    // 监视属性，使用深度监视
-    todos: {
-      // 使用深度监视，内部属性变更也会回调监视
-      deep: true,
-      handler(oldValue, newValue) {
-        console.log("--->watch todos change. newValue=", newValue);
-        // 将数据放到本地缓存
-        localStorage.setItem("todos", JSON.stringify(newValue));
-      },
-    },
-  },
   methods: {
-    // 添加 todo 回调函数
-    onReceiveTodo(value) {
-      // 1. 接收到 todo 对象
-      console.log("perfrom app addTodo method, value=", value);
-      // 2. 插入数据到 todos 列表第一条
-      this.todos.unshift(value);
-      // 3. vue感知到数据变更后，重新解析模板，此时 todos 已经变更，所以页面会刷新
+    sendNameToApp(name) {
+      console.log("perfrom App sendNameToApp, name=", name);
+      this.msg = name;
     },
-    // 复选框变更回调函数
-    onReceiveUpdateChecked(id) {
-      console.log("perfrom app onReceiveUpdateChecked: value=", id);
-      // 接收到 TodoItem 传过来的数据变更
-      this.todos.forEach((todo) => {
-        // 根据id找到数据，然后取反
-        if (todo.id === id) todo.done = !todo.done;
-      });
-      // 由于 todos 数据变更，vue会重新解析模板
+    // App 组件给 Student 组件绑定的 atguigu 事件回调函数
+    // 如果有多个参数，直接在参数后面添加数据即可 (name, age, sex) 或者 (name, ...params) 方式，接收name参数，后面的参数使用 params 数组接收
+    getStudentName(name) {
+      console.log("perfrom app getStudentName, name=", name);
+      this.msg = name;
     },
-    // 删除todo事件回调
-    onReceiveRemove(id) {
-      console.log("perfrom app onReceive remove, id=", id);
-      // 过滤出 id 不相同的todo，然后重新给 todos 数组赋值
-      // todos数据变更，vue会重新解析模板
-      this.todos = this.todos.filter((todo) => todo.id !== id);
-    },
-    clearAll(value) {
-      console.log("perfrom app clear, checked=", value);
-      // 将所有数据刷新成 value 参数对应的数据
-      this.todos.forEach((todo) => (todo.done = value));
-      // todos数据变更，vue会重新解析模板
-    },
-    clearCheckedTodo() {
-      console.log("perfrom app clearCheckedTodo");
-      // 过滤出所有非选中的todo重新赋值给 todos 列表
-      // todos数据变更，vue会重新解析模板
-      this.todos = this.todos.filter((todo) => !todo.done);
+    test() {
+      console.log("perform app test()");
     },
   },
 };
 </script>
 
 <style>
-/*base*/
-body {
-  background: #fff;
-}
-
-.btn {
-  display: inline-block;
-  padding: 4px 12px;
-  margin-bottom: 0;
-  font-size: 14px;
-  line-height: 20px;
-  text-align: center;
-  vertical-align: middle;
-  cursor: pointer;
-  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
-    0 1px 2px rgba(0, 0, 0, 0.05);
-  border-radius: 4px;
-}
-
-.btn-danger {
-  color: #fff;
-  background-color: #da4f49;
-  border: 1px solid #bd362f;
-}
-
-.btn-danger:hover {
-  color: #fff;
-  background-color: #bd362f;
-}
-
-.btn:focus {
-  outline: none;
-}
-
-.todo-container {
-  width: 600px;
-  margin: 0 auto;
-}
-.todo-container .todo-wrap {
-  padding: 10px;
-  border: 1px solid #ddd;
-  border-radius: 5px;
+.app {
+  background-color: aquamarine;
 }
 </style>
