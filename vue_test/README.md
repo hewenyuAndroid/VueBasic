@@ -212,4 +212,41 @@ props 传递过来的是一个对象类型的值，修改对象中的属性时 V
     - `JSON.parse(null)` 的返回值也是 `null`;
     - `xxxStorage.setItem('key', 'value')` 存储的键值对都是字符串，如果需要存储对象使用 `xxxStorage.setItem('key', JSON.stringify({...}))`;
 
+# 组件的自定义事件
 
+1. 一种组件间通信的方式，适用于: 子组件 ==> 父组件;
+2. 使用场景: A是父组件，B是子组件，B想给A传数据，那么需要在 A 中给B绑定自定义事件 （事件的回调在 A 中）;
+3. 绑定自定义事件:
+    - 第一种方式: 给 `Student` 组件绑定 `testEvent` 事件，如果事件被触发，则会执行 `test()` 函数
+        - 在父组件中 `<Student @testEvent="test" />` 或 `<Student v-on:testEvent="test" />` ;
+        - 如果只要触发一次事件 `<Student @testEvent.once='test'/>` ;
+    - 第二种方式: 在父组件的回调函数中绑定
+    ```js
+    // 给组件设置 ref 引用
+    <Student ref="student" />
+
+    // 在 mounted() 挂载回调函数中绑定事件, 事件能够执行多次
+    this.$refs.student.$on('testEvent', this.test)
+
+    // 在 mounted() 挂载回调函数中绑定事件，事件只会被触发一次
+    this.$refs.student.$once('testEvent', this.test)
+    ```
+4. 触发自定义事件: `this.$emit('testEvent', 数据)`
+5. 解绑自定义事件
+```js
+// 解绑单个事件
+this.$off('testEvent')
+// 解绑多个事件
+this.$off(['testEvent', 'demo'])
+// 解绑所有事件
+this.$off()
+```
+6. 组件也可以绑定原生事件
+```js
+// 直接使用 click 会把 click 认为成是自定义事件
+<Student @click="test" />
+
+// 如果想用使用原生的 click 事件，需要使用 native 修饰符
+<Student @click.native="test" />
+```
+7. 注意: 通过 `this.$refs.xxx.$on('testEvent', 数据)` 绑定自定义事件时，回调函数要么配置在 `methods` 中，要么使用箭头函数，否则 `this` 会指向 `vc` 子组件；
