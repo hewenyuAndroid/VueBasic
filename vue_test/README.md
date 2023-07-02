@@ -314,7 +314,8 @@ this.$off()
     ...
     methods: {
         // 订阅消息的回调函数
-        test(value) {
+        // 消息订阅 第一个参数返回的是 key 的名称，第二个参数开始才是数据
+        test(msgName, value) {
             ....
         },
     }
