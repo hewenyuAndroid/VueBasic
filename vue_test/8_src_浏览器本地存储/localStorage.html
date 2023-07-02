@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8" />
+    <title>浏览器本地存储-localStorage</title>
+</head>
+
+<body>
+    <h3>localStorage缓存位置: F12 / 应用 / 存储 / 本地存储空间 / 域名</h3>
+
+    <button onClick="saveStr()">点击存储一个字符串</button>
+    <button onClick="saveNum()">点击存储一个数字</button>
+    <button onClick="saveObj()">点击存储一个对象</button>
+    <br />
+    <br />
+    <button onClick="readStr()">读取字符串</button>
+    <button onClick="readNum()">读取数字</button>
+    <button onClick="readObj()">读取对象</button>
+    <button onClick="readNull()">读取一个不存在的存储</button>
+    <br />
+    <br />
+    <button onClick="deleteStr()">点击删除字符串缓存</button>
+    <br />
+    <br />
+    <button onClick="clearStorage()">点击清空缓存</button>
+    <br />
+    <br />
+    <img src="localStorage.png" style="width: 60%;" />
+
+    <script>
+        // 存储字符串
+        function saveStr() {
+            window.localStorage.setItem("name", "zhangsan")
+        }
+        // 存储一个数字
+        function saveNum() {
+            window.localStorage.setItem("age", 20)
+        }
+        // 存储一个对象
+        function saveObj() {
+            const person = { 'name': "lisi", 'age': 18 }
+            // 这里value会调用 toString() 后存储，导致存储内容为 [object Object]
+            // window.localStorage.setItem("person", person)
+            // 存储对象，需要转 json 后存储 json 字符串
+            window.localStorage.setItem('person', JSON.stringify(person))
+        }
+
+        // 读取字符串
+        function readStr() {
+            let name = window.localStorage.getItem('name')
+            console.log("readStr name:", name)
+        }
+        // 读取数字
+        function readNum() {
+            let age = window.localStorage.getItem('age')
+            console.log("readStr age:", age)
+        }
+        // 读取对象
+        function readObj() {
+            // 读取出来的数据是字符串
+            let personStr = window.localStorage.getItem('person')
+            // 通过 JSON.parse() 转成对象
+            // 这里如果 存储中没有 person 数据，则 personStr = null
+            // 此时 通过 JSON.parse(null) 返回的也是 null
+            let person = JSON.parse(personStr)
+            console.log("readStr person:", person)
+        }
+        // 读取一个不存在的存储数据，此时返回的是 null
+        function readNull() {
+            console.log("read null key: value=", window.localStorage.getItem("xxxx"))
+        }
+
+        // 删除一个存储
+        function deleteStr() {
+            console.log("delete localStorage, key=name")
+            window.localStorage.removeItem('name')
+        }
+
+        // 清空所有的存储
+        function clearStorage() {
+            console.log("clear localStorage.")
+            window.localStorage.clear()
+        }
+    </script>
+</body>
+
+</html>

@@ -196,5 +196,20 @@ v-model绑定的值**不能**是 props 传递过来的值，因为 props 是不�
 props 传递过来的是一个对象类型的值，修改对象中的属性时 Vue 不会报错，但是不推荐这样做;
 
 
+# webStorage 浏览器本地存储
+
+1. 存储的内容一般支持 5M 左右（不同浏览器可能不同）;
+2. 浏览器端通过 `Window.localStorage` 或 `Window.sessionStorage` 属性来实现本地存储机制;
+3. 相关API:
+    - `xxxStorage.setItem('key', 'value')`: 该方法接收一个键和值作为参数，会把键值对添加到存储中，如果 `key` 已经存在，则会覆盖 `value` 值;
+    - `xxxStorage.getItem('key')`: 该方法接收一个键名 (`key`) 作为参数，返回键名对应的值；
+    - `xxxStorage.removeItem('key')`: 该方法接受一个键名 (`key`) 作为参数，会将该键名对应的 `key-value` 从存储中删除;
+    - `xxxStorage.clear()`: 该方法会清空存储中的所有数据;
+4. 备注:
+    - `SessionStorage` 存储的内容会随着浏览器窗口的关闭而消失;
+    - `LocalStorage` 存储的内容需要手动清除 （清空浏览器缓存 / 调用删除的API）才会消失;
+    - `xxxStorage.getItem('key')` 如果存储中没有对应的 `key-value` 键值对，那么 `getItem()` 返回的是 `null`;
+    - `JSON.parse(null)` 的返回值也是 `null`;
+    - `xxxStorage.setItem('key', 'value')` 存储的键值对都是字符串，如果需要存储对象使用 `xxxStorage.setItem('key', JSON.stringify({...}))`;
 
 
