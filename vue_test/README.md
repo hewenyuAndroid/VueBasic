@@ -330,3 +330,34 @@ this.$off()
 1. 语法: `this.$nextTick(回调函数)`
 2. 作用: 在下一次DOM 更新结束后执行其指定的回调函数；
 3. 什么时候用: 当改变数据后，要基于更新后的新 DOM 进行某些操作时，要在 `nextTick()` 所指定的回调函数中执行。
+
+
+# Vue封装的过渡与动画
+
+1. 作用: 在插入、更新或移除 DOM 元素时，在合适的时候给元素添加样式类名;
+2. 图示: ![vue过渡与动画](./src/assets/vue_animation.png)
+3. 写法:
+    1. 准备好样式:
+        - 元素进入的样式
+            - `v-enter`: 进入的起点
+            - `v-enter-active`: 进入的过程中
+            - `v-enter-to`: 进入的终点
+        - 元素离开的样式
+            - `v-leave`: 离开的起点
+            - `v-leave-active`: 离开过程中
+            - `v-leave-to`: 离开的终点
+    2. 使用 `<transition>` 标签包括要过渡的元素，并配置name属性
+        ```js
+        // 单个元素配置过渡
+        // appear标签: 表示一进入就执行动画
+        <transition name="hello" appear="true">
+            <h1 v-show="is-show">hello</h1>
+        </transition>
+
+        // 多个元素配置过渡
+        <transition-group name="hello-group">
+            <h1 v-show="!is-show" key="1">你好啊</h1>
+            <h1 v-show="is-show" key="1">hello</h1>
+        </transition-group>
+        ```
+备注: 若有多个元素需要过渡，则需要使用 `<transition-group>` 标签，且每个元素都要指定 `key` 值;
