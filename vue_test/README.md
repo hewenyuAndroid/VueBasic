@@ -250,3 +250,41 @@ this.$off()
 <Student @click.native="test" />
 ```
 7. 注意: 通过 `this.$refs.xxx.$on('testEvent', 数据)` 绑定自定义事件时，回调函数要么配置在 `methods` 中，要么使用箭头函数，否则 `this` 会指向 `vc` 子组件；
+
+
+# 全局事件总线 (GlobalEventBus)
+
+1. 一种组件间通信的方式，适用于 **任意组件间的通信**。
+2. 安装全局事件总线:
+    ```js
+    new Vue({
+        ...
+        beforeCreate() {
+            // 安装全局的事件总线， $bus 就是当前应用的 vm
+            Vue.prototype.$bus = this
+        },
+        ...
+    })
+    ---
+3. 适用事件总线:
+    - 接收数据: A 组件想接收数据，则在 A组件中给 `$bus` 绑定自定义事件，事件的回调留在 A 组件自身;
+    ```js
+    ...
+    mounted() {
+        // 绑定自定义事件到全局事件总线
+        // 事件名称: testEvent
+        // 留在组件A的事件回调函数 test
+        this.$bus.$on('testEvent', this.test)
+    },
+    ...
+    methods: {
+        // 回调函数
+        test(data) {
+            ...
+        }，
+    }
+    ...
+    ```
+    - 提供数据的地方发送事件: `this.$bus.$on('testEvent', 数据)`;
+
+4. 最好在 `beforeDestroy()` 钩子函数中，用 `$off('testEvent')` 解绑当前组件用到的事件;
