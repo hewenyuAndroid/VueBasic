@@ -288,3 +288,37 @@ this.$off()
     - 提供数据的地方发送事件: `this.$bus.$on('testEvent', 数据)`;
 
 4. 最好在 `beforeDestroy()` 钩子函数中，用 `$off('testEvent')` 解绑当前组件用到的事件;
+
+
+# 消息订阅与发布 (pubsub)
+
+1. 一种组件间通信的方式，适用于 **任意组件间通信**。
+2. 使用步骤:
+    1. 安装: `npm i pubsub-js`;
+    2. 引入: `import pubsub from 'pubsub.js'`;
+    3. 订阅数据: A 组件想接收数据，则在 A 组件中订阅消息，订阅的回调留在 A 组件自身
+    ```js
+    // 导入 pubsub 库
+    import pubsub from 'pubsub.js'
+
+    ... 
+    mounted() {
+        // 订阅 testEvent 消息，消息的回调函数为 test
+        // 订阅后返回一个 id，可以保存在 this 对象(vc)中，解绑订阅时需要使用
+        this.pid = pubsub.subscribe('testEvent', this.test)
+    },
+    beforeDestroy() {
+        // 销毁之前解绑订阅
+        pubsub.unsubscribe('testEvent', this.pid)
+    }
+    ...
+    methods: {
+        // 订阅消息的回调函数
+        test(value) {
+            ....
+        },
+    }
+    ...
+    ```
+3. 发布数据: `pubsub.publish('testEvent', 数据)`;
+4. 最好在组件销毁之前 `beforeDestroy()` 回调函数中解绑订阅消息 `pubsub.unsubscribe('testEvent', this.pid)`;
