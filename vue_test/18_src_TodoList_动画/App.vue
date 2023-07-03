@@ -1,0 +1,181 @@
+<template>
+  <div id="root">
+    <div class="todo-container">
+      <div class="todo-wrap">
+        <!-- 在 App 层将 onReceiveTodo 函数传递给 TodoHeader 组件 -->
+        <TodoHeader @onReceiveTodo="onReceiveTodo" />
+        <!-- 在 App 层将 todos 列表传递给 TodoList 组件 -->
+        <TodoList :todos="todos" />
+        <TodoFooter
+          :todos="todos"
+          @clearAll="clearAll"
+          @clearCheckedTodo="clearCheckedTodo"
+        />
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import pubsub from "pubsub-js";
+import TodoHeader from "./components/TodoHeader.vue";
+import TodoFooter from "./components/TodoFooter.vue";
+import TodoList from "./components/TodoList.vue";
+export default {
+  name: "App",
+  components: { TodoHeader, TodoFooter, TodoList },
+  mounted() {
+    // 注册全局事件总线回调
+    // this.$bus.$on("onReceiveUpdateChecked", this.onReceiveUpdateChecked);
+    // this.$bus.$on("onReceiveRemove", this.onReceiveRemove);
+
+    // 使用 pubsub 订阅消息
+    this.pid_checked = pubsub.subscribe(
+      "onReceiveUpdateChecked",
+      this.onReceiveUpdateChecked
+    );
+    this.pid_remove = pubsub.subscribe("onReceiveRemove", this.onReceiveRemove);
+
+    this.$bus.$on("updateTodoTitle", this.updateTodoTitle);
+  },
+  beforeDestroy() {
+    // 组件销毁之前解绑事件总线
+    // this.$bus.$off(["onReceiveUpdateChecked", "onReceiveRemove"]);
+
+    pubsub.unsubscribe("onReceiveUpdateChecked", this.pid_checked);
+    pubsub.unsubscribe("onReceiveRemove", this.pid_removeF);
+
+    this.$bus.$off("updateTodoTitle");
+  },
+  data() {
+    return {
+      // todos: [
+      //   { id: "001", title: "抽烟", done: true },
+      //   { id: "002", title: "喝酒", done: false },
+      //   { id: "003", title: "烫头", done: true },
+      // ],
+      // todos 的数据默认从缓存中读取，通过 || 命令，如果缓存中不存在则使用一个 空数组
+      todos: JSON.parse(localStorage.getItem("todos")) || [],
+    };
+  },
+  watch: {
+    // 监视属性，监听 todos 数据的变更，简写方式，存在bug，内部数据变更无法监视到，导致数据状态不对
+    // todos(oldValue, newValue) {
+    //   console.log("--->watch todos change. newValue=", newValue);
+    //   // 将数据放到本地缓存
+    //   localStorage.setItem("todos", JSON.stringify(newValue));
+    // },
+
+    // 监视属性，使用深度监视
+    todos: {
+      // 使用深度监视，内部属性变更也会回调监视
+      deep: true,
+      handler(oldValue, newValue) {
+        console.log("--->watch todos change. newValue=", newValue);
+        // 将数据放到本地缓存
+        localStorage.setItem("todos", JSON.stringify(newValue));
+      },
+    },
+  },
+  methods: {
+    // 添加 todo 回调函数
+    onReceiveTodo(value) {
+      // 1. 接收到 todo 对象
+      console.log("perfrom app addTodo method, value=", value);
+      // 2. 插入数据到 todos 列表第一条
+      this.todos.unshift(value);
+      // 3. vue感知到数据变更后，重新解析模板，此时 todos 已经变更，所以页面会刷新
+    },
+    // 复选框变更回调函数
+    onReceiveUpdateChecked(_, id) {
+      console.log("perfrom app onReceiveUpdateChecked: value=", id);
+      // 接收到 TodoItem 传过来的数据变更
+      this.todos.forEach((todo) => {
+        // 根据id找到数据，然后取反
+        if (todo.id === id) todo.done = !todo.done;
+      });
+      // 由于 todos 数据变更，vue会重新解析模板
+    },
+    // 删除todo事件回调
+    onReceiveRemove(_, id) {
+      console.log("perfrom app onReceive remove, id=", id);
+      // 过滤出 id 不相同的todo，然后重新给 todos 数组赋值
+      // todos数据变更，vue会重新解析模板
+      this.todos = this.todos.filter((todo) => todo.id !== id);
+    },
+    clearAll(value) {
+      console.log("perfrom app clear, checked=", value);
+      // 将所有数据刷新成 value 参数对应的数据
+      this.todos.forEach((todo) => (todo.done = value));
+      // todos数据变更，vue会重新解析模板
+    },
+    clearCheckedTodo() {
+      console.log("perfrom app clearCheckedTodo");
+      // 过滤出所有非选中的todo重新赋值给 todos 列表
+      // todos数据变更，vue会重新解析模板
+      this.todos = this.todos.filter((todo) => !todo.done);
+    },
+    updateTodoTitle(id, title) {
+      console.log("perform app updateTodoTitle(), id=", id, ", title=", title);
+      this.todos.forEach((element) => {
+        // 根据id匹配数据然后修改对应
+        // todos数据变更，vue会重新解析模板值
+        if (element.id === id) element.title = title;
+      });
+    },
+  },
+};
+</script>
+
+<style>
+/*base*/
+body {
+  background: #fff;
+}
+
+.btn {
+  display: inline-block;
+  padding: 4px 12px;
+  margin-bottom: 0;
+  font-size: 14px;
+  line-height: 20px;
+  text-align: center;
+  vertical-align: middle;
+  cursor: pointer;
+  box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.2),
+    0 1px 2px rgba(0, 0, 0, 0.05);
+  border-radius: 4px;
+}
+
+.btn-danger {
+  color: #fff;
+  background-color: #da4f49;
+  border: 1px solid #bd362f;
+}
+
+.btn-edit {
+  color: #fff;
+  background-color: skyblue;
+  border: 1px solid skyblue;
+  margin-right: 5px;
+}
+
+.btn-danger:hover {
+  color: #fff;
+  background-color: #bd362f;
+}
+
+.btn:focus {
+  outline: none;
+}
+
+.todo-container {
+  width: 600px;
+  margin: 0 auto;
+}
+.todo-container .todo-wrap {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+}
+</style>
