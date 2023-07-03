@@ -1,6 +1,11 @@
 <template>
   <div>
-    <transition name="hello" appear="true">
+    <transition
+      appear="true"
+      name="animate__animated animate__bounce"
+      enter-active-class="animate__swing"
+      leave-active-class="animate__backOutLeft"
+    >
       <h2 v-show="isShow">你好啊Test4</h2>
     </transition>
     <br />
@@ -9,6 +14,9 @@
 </template>
 
 <script>
+// npm install animate.css
+import "animate.css";
+
 export default {
   name: "anim-test-4",
   data() {
@@ -22,22 +30,5 @@ export default {
 <style scoped>
 h2 {
   background-color: aqua;
-}
-
-/* 进入的起点，离开的终点 */
-.hello-enter,
-.hello-leave-to {
-  transform: translateX(-100%);
-}
-
-/* 进入的终点，离开的起点 */
-.hello-enter-to,
-.hello-leave {
-  transform: translateX(0px);
-}
-
-.hello-enter-active,
-.hello-leave-active {
-  transition: 0.5s linear;
 }
 </style>

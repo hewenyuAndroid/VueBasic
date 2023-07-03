@@ -357,7 +357,7 @@ this.$off()
         // 多个元素配置过渡
         <transition-group name="hello-group">
             <h1 v-show="!is-show" key="1">你好啊</h1>
-            <h1 v-show="is-show" key="1">hello</h1>
+            <h1 v-show="is-show" key="2">hello</h1>
         </transition-group>
         ```
 备注: 若有多个元素需要过渡，则需要使用 `<transition-group>` 标签，且每个元素都要指定 `key` 值;
