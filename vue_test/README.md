@@ -361,3 +361,67 @@ this.$off()
         </transition-group>
         ```
 备注: 若有多个元素需要过渡，则需要使用 `<transition-group>` 标签，且每个元素都要指定 `key` 值;
+
+
+# vue脚手架配置代理
+
+1. 安装 axios: `npm i axios`；
+2. axios 请求案例:
+```js
+ axios.get("http://localhost:8080/students").then(
+        (response) => {
+          // 请求成功的回调
+          console.log(`query students success, ${response.data}`);
+        },
+        (error) => {
+          // 请求失败的回调
+          console.log(`query students failure, ${error.message}`);
+        }
+      );
+```
+
+## 配置方法1
+
+在 `vue.config.js` 配置文件中增加如下配置:
+```js
+  devServer: {
+    // 代理 host 为 http://localhost:5000 的请求
+    // 配置后，代码中请求为 http://localhost:5000 域名的 直接改为 http://localhost:8080
+    proxy: "http://localhost:5000"
+  },
+```
+说明:
+- 优点: 配置简单，请求资源时直接发给前端 (8080) 即可;
+- 缺点: 不能配置多个代理，不能灵活的控制请求是否走代理;
+- 工作方式: 若按照上述配置代理，当请求了前端不存在的资源时，那么该请求会转发给服务器(优先匹配前端资源, 优先匹配 http://localhost:8080 服务器资源);
+
+## 配置方法2
+
+在 `vue.config.js` 配置具体代理规则:
+
+```js
+module.exports = {
+	devServer: {
+      proxy: {
+      '/api1': {// 匹配所有以 '/api1'开头的请求路径
+        target: 'http://localhost:5000',// 代理目标的基础路径
+        changeOrigin: true,
+        pathRewrite: {'^/api1': ''}
+      },
+      '/api2': {// 匹配所有以 '/api2'开头的请求路径
+        target: 'http://localhost:5001',// 代理目标的基础路径
+        changeOrigin: true,
+        pathRewrite: {'^/api2': ''}
+      }
+    }
+  }
+}
+/*
+   changeOrigin设置为true时，服务器收到的请求头中的host为：localhost:5000
+   changeOrigin设置为false时，服务器收到的请求头中的host为：localhost:8080
+   changeOrigin默认值为true
+*/
+```
+说明:
+- 优点: 可以配置多个代理，且可以灵活的控制请求是否走代理;
+- 缺点: 配置略微繁琐，请求资源时必须加前缀;
