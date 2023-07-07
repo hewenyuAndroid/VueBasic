@@ -425,3 +425,95 @@ module.exports = {
 说明:
 - 优点: 可以配置多个代理，且可以灵活的控制请求是否走代理;
 - 缺点: 配置略微繁琐，请求资源时必须加前缀;
+
+
+# 插槽
+
+1. 作用: 让父组件可以向子组件指定位置插入 html 结构，也是一种组件间通信的方式，适用于 父组件 ==> 子组件;
+2. 分类: 默认插槽、具名插槽、作用域插槽;
+3. 使用方式
+    1. 默认插槽:
+        ```js
+        // 父组件中:
+        <Category>
+            <div>html结构1</div>
+        </Category>
+
+        // 子组件中:
+        <template>
+            <div>
+                <!-- 定义插槽 -->
+                <slot>插槽默认显示的内容</slot>
+            </div>
+        </template>
+        ```
+    2. 具名插槽：
+        ```js
+        // 父组件中:
+        <Category>
+            <!-- 向 name=id1 的插槽插入html内容 -->
+            <template slot="id1" >
+                <div>html结构1</div>
+            </template>
+
+            <!-- 向 name=id2 的插槽插入html内容 -->
+             <template slot="id2" >
+                <div>html结构2</div>
+            </template>
+        </Category>
+
+        // 子组件中:
+        <template>
+            <div>
+                <!-- 定义插槽，指定name -->
+                <slot name="id1">name=id1 插槽默认显示的内容</slot>
+                <slot name="id2">name=id2 插槽默认显示的内容</slot>
+            </div>
+        </template>
+        ```
+    3. 作用域插槽:
+        - 理解: 数据在子组件自身，但根据数据生成的结构需要组件使用者 (父组件) 来决定。
+        - 具体编码:
+        ```js
+        // 父组件中：
+		<Category>
+            <!--
+                这里 scope 的名称可以随便定义，scope 对应的值为 {"games":...}
+            -->
+			<template scope="scopeData">
+				<!-- 生成的是ul列表 -->
+				<ul>
+					<li v-for="g in scopeData.games" :key="g">{{g}}</li>
+				</ul>
+			</template>
+		</Category>
+
+		<Category>
+			<template slot-scope="scopeData">
+				<!-- 生成的是h4标题 -->
+				<h4 v-for="g in scopeData.games" :key="g">{{g}}</h4>
+			</template>
+		</Category>
+
+        // 子组件中：
+        <template>
+            <div>
+                <!-- 这里将子组件的 this.games 数据通过 games 名称传递给父组件中使用 -->
+                <slot :games="games"></slot>
+            </div>
+        </template>
+		
+        <script>
+            export default {
+                name:'Category',
+                props:['title'],
+                //数据在子组件自身
+                data() {
+                    return {
+                        games:['红色警戒','穿越火线','劲舞团','超级玛丽']
+                    }
+                },
+            }
+        </script>
+        ```
+
