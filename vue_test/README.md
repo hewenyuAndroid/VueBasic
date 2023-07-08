@@ -517,3 +517,65 @@ module.exports = {
         </script>
         ```
 
+
+# Vuex
+
+1. 概念
+    在 Vue 中实现集中式状态（数据）管理的一个 Vue 插件，对 Vue 应用中多个组件的共享状态进行集中式的管理（读/写），也是一种组件间通信的方式，且适用于任意组件间通信。
+2. 何时使用: 多个组件需要共享数据时。
+3. 搭建 Vuex 环境
+    1. 安装 vuex 插件
+    `vue` 和 `vuex` 插件版本关系:
+    - `vue2 --> vuex3`
+    - `vue3  --> vuex4`  
+    
+    使用命令 `npm i vuex` 安装的是最新版本 `vuex4`；
+    使用 `npm i vuex@3` 安装 `vuex3` 版本;
+    
+
+    2. 创建文件: `src/store/index.js`
+    ```js
+    // 引入 Vue 核心
+    import Vue from 'vue'
+    // 引入 Vuex
+    import Vuex from 'vuex'
+    
+    // 应用 Vuex 插件
+    Vue.use(Vuex)
+
+    // 准备 actions 对象 -- 响应组件中用户的动作
+    const actions = {}
+    // 准备 mutations 对象 -- 修改 state 中的数据
+    const mutations = {}
+    // 准备 state 对象 -- 保存具体的数据
+    const state = {}
+
+    // 创建并暴露 store
+    export default new Vuex.Store({
+        // actions:actions,
+        // mutations:mutations,
+        // state:state
+        // 简写
+        actions,
+        mutations,
+        state,
+    })
+    ```
+
+    3. 在 `main.js` 中创建 `vm` 时传入 `store` 配置项
+    ```js
+    ...
+    // import store from './store/index.js'
+    // 如果导入的是目录下的 index.js 可以简写如下
+    import store from './store'
+    ...
+
+    // 创建 vm
+    new Vue({
+        el:'#app',
+        render: h=>h(App),
+        // store:store,
+        // key-value 相同简写如下
+        store,
+    })
+    ```
