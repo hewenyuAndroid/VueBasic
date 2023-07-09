@@ -646,7 +646,28 @@ module.exports = {
     2. 组件中读取 vuex 中的数据: `$store.state.sum`
     3. 组件中修改 vuex 中的数据 :
         - 方案1: `$store.dispatch('action中的方法名', params)`  --> 标准使用方式
-        - 方案2: `$store.commit('mutations中的方法名', params)` --> 绕过 actions 直接执行 mutations
+        - 方案2: `$store.commit('mutations中的方法名', params)` --> 绕过 `actions` 直接执行 `mutations`
         
     备注: 若没有网络请求或其它业务逻辑，组件中也可以绕过 actions，即 上述方案2;
 
+4. `getters` 的使用
+    1. 概念: 当 `state` 中的数据需要经过加工后再使用时，可以使用 `getters` 加工;
+    2. 在 `store/index.js` 中追加 `getters` 配置
+    ```js
+    ...
+    // 准备 getters 对象，用于对 state 数据进行加工
+    const getters = {
+        bigSum(state){
+            return state.sum * 10
+        }
+    }
+    ...
+
+    // 创建并暴露store
+    export default new Vuex.Store({
+        ...
+        // 配置 getters 到 store中
+        getters,
+    })
+    ```
+    3. 组件中使用: `$store.getters.bigSum`
