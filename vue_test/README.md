@@ -671,3 +671,38 @@ module.exports = {
     })
     ```
     3. 组件中使用: `$store.getters.bigSum`
+
+6. 四个map方法的使用
+
+    1. `mapState`方法: 用于帮助映射 `$store.state` 中的数据，为计算属性
+    ```js
+    ...
+    import {mapState} from 'vuex'
+    ...
+    computed: {
+        // 借助 mapState 生成计算属性: sum、school、subject (对象写法)
+        // key: 组件中使用的名称
+        // value: 为 $store.state 中字段的名称
+        ...mapState({he:'sum', school:'school', subject:'subject'}),
+
+        // 借助 mapState 生成计算属性: sum、school、subject （数组写法）
+        ...mapState(['sum', 'school', 'subject']),
+    }
+    ```
+
+    2. `mapGetters`方法: 用于帮助映射 `$store.gatters` 中的数据，为计算属性
+    ```js
+    import {mapState, mapGatters} from 'vuex'
+    ...
+    computed: {
+        // 借助 mapGatters 生成计算属性: bigSum (对象写法)
+        // key: 组件中使用的名称
+        // value: 为 $store.gatters 中字段的名称
+        ...mapGatters({bigSum:'bigSum'}),
+
+        // 借助 mapGatters 生成计算属性: bigSum (数组写法)
+        // key: 组件中使用的名称bigSum
+        // value: 为 $store.gatters 中字段的名称
+        ...mapGatters(['bigSum'])
+    }
+    ```
