@@ -706,3 +706,41 @@ module.exports = {
         ...mapGatters(['bigSum'])
     }
     ```
+
+    3. `mapActions`方法: 用于帮助生成与 `$store.actions` 对话的方法，即: 包含 `$store.dispatch(xxx)` 的函数
+    ```js
+    import {mapActions} from 'vuex'
+    ...
+    methods: {
+        // 通过 mapActions 生成: increament, decreament 函数 (对象写法)
+        ...mapActions({increament:'increament', decreament:'decreament'}),
+
+        // 通过 mapActions 生成: increament, decreament 函数 (数组写法)
+        ...mapActions(['increament', 'decreament']),
+
+        // 注意: 如果函数有使用到组件中的参数 (this.step)，则需要调用的地方传入参数
+        // 原先写法: <button @click="increament()" />
+        // 使用 mapActions 后: <button @click="increament(step)" />
+    }
+    ```
+
+    4. `mapMutations` 方法: 用于帮助生成与 `mutations` 对话的方法，即: 包含 `$store.commit(xxx)` 的函数
+    ```js
+    import {mapMutations} from 'vuex'
+    ...
+    methods: {
+        // 通过 mapMutations 生成 increament, decreament 函数 (对象写法)
+        ...mapMutations({increament:'INCRAEMENT', decreament:'DECREAMENT'}),
+
+        // 通过 mapMutations 生成 increament, decrement 函数 (数组)
+        ...mapMutations(['INCRAEMENT', 'DECREAMENT']),
+
+        // 注意: 如果函数有使用到组件中的参数 (this.step)，则需要调用的地方传入参数
+        // 原先写法: <button @click="INCREAMENT()" />
+        // 使用 mapActions 后: <button @click="INCREAMENT(step)" />
+    }
+    ```
+
+备注: `mapActions` 与 `mapMutations` 使用时，若需要传递参数，则需要在 模板中绑定事件时传递好参数，否则参数是事件对象;
+
+
