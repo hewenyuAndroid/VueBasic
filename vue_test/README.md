@@ -582,3 +582,71 @@ module.exports = {
         store,
     })
     ```
+
+4. 基本使用
+    1. 初始化数据: 配置 actions，mutations，操作文件 store/index.js
+    ```js
+    // 该文件用于创建 Vuex 中最为核心的 store
+    ... 文件导入参考上面
+
+    // 准备 actions -- 用于响应组件中的动作
+    const actions = {
+        // 参数1: vuex 上下文
+        // 参数2: 组件传递过来的参数
+        // increament: function (context, value) {
+        //     console.log("perform vuex actions, increament")
+        // },
+        // 加法操作，简写方式
+        increament(context, value) {
+            console.log('perfrom vuex actions increament, context=', context, ', value=', value);
+            // 这里的 this 是 Store，代理了 state 对象，可以直接取 state 中的数据
+            console.log('perfrom vuex actions increament, this=', this);
+            // 将动作传递个 mutations 执行数据操作
+            context.commit('INCREAMENT', value);
+        },
+        ...
+        // sum 为奇数再执行加法
+        increamentOdd(context, value) {
+            console.log('perfrom vuex actions increamentOdd, context=', context, ', value=', value);
+            if (state.sum % 2) {
+                // 奇数进来，加法操作分发给之前写好的 actions
+                // this.dispatch("increament", value);
+                context.dispatch("increament", value);
+            }
+        },
+        ...
+    }
+
+    // 准备 mutations -- 用于操作数据 (state)
+    const mutations = {
+        // 参数参考 actions
+        // mutations 中的函数名称通常为 actions 中的大写
+        INCREAMENT(context, value) {
+            console.log("perfrom vuex mutations INCREAMENT, context=", context, ",value=", value);
+            // 这里的 this 是 Store，代理了 state 对象，可以直接取 state 中的数据
+            console.log("perfrom vuex mutations INCREAMENT, this=", this);
+            // 操作数据，数据变更后 vue 会重新解析模板(刷新页面)
+            state.sum += value;
+        },
+
+        DECREAMENT(context, value) {
+            console.log("perfrom vuex mutations DECREAMENT, context=", context, ",value=", value);
+            state.sum -= value;
+        }
+    }
+
+    // 准备 state -- 用于存储数据
+    const state = {
+        // 将 求和操作的数据值放到 store.state 中保存
+        sum: 0,
+    }
+
+    ... Vuex.Store 对象创建参考上面
+    ```
+    2. 组件中读取 vuex 中的数据: `$store.state.sum`
+    3. 组件中修改 vuex 中的数据 :
+        - 方案1: `$store.dispatch('action中的方法名', params)`  --> 标准使用方式
+        - 方案2: `$store.commit('mutations中的方法名', params)` --> 绕过 actions 直接执行 mutations
+        
+    备注: 若没有网络请求或其它业务逻辑，组件中也可以绕过 actions，即 上述方案2;
+
