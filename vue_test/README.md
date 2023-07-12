@@ -990,3 +990,61 @@ $router.query.title
     ```
 
 ## 6. 路由的 params 参数
+
+1. 配置路由, 在路由配置文件 `src/router/index.js` 中声明接收 params 参数
+
+```js
+export default new VueRouter({
+	routes: [
+        ...
+		{
+			path: '/home',
+			component: Home,
+			children: [
+				{
+					path: 'news',   // 二级路由不要写 /news
+					component: News,
+				},
+				{
+					path: 'message',
+					component: Message,
+					children: [
+						{
+							name: 'to_detail',	// 给路由命名
+							path: 'detail/:id/:title',	// 使用占位符声明接收 params 参数
+							component: Detail,
+						}
+					]
+				}
+			]
+		}
+	]
+})
+```
+
+2. 传递参数
+
+```html
+<!-- 跳转并携带 params 参数，to的字符串写法 -->
+<router-link :to="/home/message/detail/666/nihao">跳转</router-link>
+<!-- 跳转并携带 params 参数，to的模板字符串写法 -->
+<router-link :to="`/home/message/detail/${msg.id}/${msg.title}`">跳转</router-link>
+
+<!-- 跳转并携带 params 参数，to的对象写法 -->
+<router-link :to="{
+    name:'to_detail',
+    params: {
+        id:666,
+        title:'nihao'
+    }
+}">跳转</router-link>
+```
+
+备注: 路由携带 `params` 参数时，若使用 to 的对象写法，则不能使用 path 配置项，必须使用 name 配置;
+
+3. 接收参数
+
+```js
+$route.params.id
+$route.params.title
+```
