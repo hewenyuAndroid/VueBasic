@@ -1048,3 +1048,39 @@ export default new VueRouter({
 $route.params.id
 $route.params.title
 ```
+
+## 7. 路由的 props 配置
+
+作用: 让路由组件更方便的收到参数，配置如下:
+
+```js
+// 1. 路由配置
+{
+    name: 'to_detail',
+    path: 'detail/:id/:title',
+    component: Detail,
+
+    // 第一种写法: props 值为对象，该对象中所有的 key-value 的组合最终都会通过 props 传递给 Detail 组件
+    // props: {id: 666},
+
+    // 第二种写法: props 值为 布尔值，布尔值为 true，则把路由收到的所有 params 参数通过 props 传递给 Detail 组件
+    // props: true,
+
+    // 第三种写法: props 值为 函数，该函数返回的对象中每一组 key-value 都会通过 props 传给 Detail 组件
+    // 函数入参为 route 对象
+    props(route) {
+        return {
+            id: route.query.id,
+            title: route.query.title
+        }
+    },
+}
+
+// 2. 接收参数，在Detail组件中
+
+// 在 props 属性中配置key
+props:['id', 'title']
+// 代码中直接使用
+<li>消息id:{{id}}</li>
+```
+
