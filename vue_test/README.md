@@ -1147,5 +1147,10 @@ this.$router.go(count)
 <keep-alive include='News' >
     <router-view></router-view>
 </keep-alive>
+
+<!-- 缓存 <router-view> 上的多个组件 -->
+<keep-alive :include="['News', 'Message']" >
+    <router-view></router-view>
+</keep-alive>
 ```
 
