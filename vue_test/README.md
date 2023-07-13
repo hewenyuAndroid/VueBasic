@@ -1099,3 +1099,33 @@ props:['id', 'title']
 <!-- 简写 -->
 <router-link replace ....>News</router-link>
 ```
+
+## 9. 编程式路由导航
+
+1. 作用: 不借助 `<router-link>` 实现路由跳转，让路由跳转更加灵活;
+2. 如何实现：
+```js
+// $router 的两个 API ($router 对象全局只有一个)
+this.$router.push({
+    name: 'to_detail',
+    params: {
+        id:666,
+        title:'nihao',
+    }
+})
+
+this.$router.replace({
+    name: 'to_detail',
+    params: {
+        id: 666,
+        title: 'nihao',
+    }
+})
+
+// 前进
+this.$router.forward()
+// 后退
+this.$router.back()
+// 前进/后退指定页面    count>0前进 count<0后退
+this.$router.go(count)
+```
