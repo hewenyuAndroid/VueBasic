@@ -1084,3 +1084,18 @@ props:['id', 'title']
 <li>消息id:{{id}}</li>
 ```
 
+
+## 8 <router-link> 的 replace 属性
+
+1. 作用: 控制路由跳转时，操作浏览器历史记录的模式;
+2. 浏览器的历史记录有两种写入方式:
+    - `push`: 追加历史记录; (路由跳转时，默认为 `push`)
+    - `replace`: 替换当前记录;
+3. 如何使用: 
+```html
+<!-- 使用 replace 属性设置路由跳转的 replace 模式 -->
+<router-link :replace="true" ....>News</router-link>
+
+<!-- 简写 -->
+<router-link replace ....>News</router-link>
+```
