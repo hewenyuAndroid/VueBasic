@@ -1161,3 +1161,50 @@ this.$router.go(count)
     - `activated`: 路由组件被激活 (显示) 时触发;
     - `deactivated`: 路由组件失活 (隐藏) 时触发;
 
+
+## 12. 路由守卫
+
+1. 作用：对路由进行权限控制;
+2. 分类: 全局守卫、独享守卫、组件内守卫;
+
+### 全局守卫
+
+```js
+const router = new VueRouter({
+    routes: [
+        {
+            path: '/home',
+            component: Home,
+            meta: {isAuth:true, title:'zhuye',...}    // meta 里面可以配置路由配置对象的自定义数据
+        },
+        ...
+    ]
+})
+
+// 全局前置守卫: 初始化时执行、每次路由切换前执行
+router.beforeEach((to, from, next)=>{
+    console.log(`perfrom beforeEach, from=${from}, to=${to}, next=${next}.`)
+    if (to.meta.isAuth) {
+        // 判断路由是否配置了需要校验权限
+        if (localStorage.getItem('account') !== '') {   // 判断本地缓存中是否有账号
+            next(); // 调用 next() 表示向下执行路由跳转
+        } else {
+            alert('请先登录')
+        }
+    } else {
+        // 不需要校验权限的直接跳转
+        next();
+    }
+})
+
+// 全局后置守卫: 初始化时执行、每次路由跳转后执行
+router.afterEach((to, from) => {
+    console.log(`perfrom afterEach, from=${from}, to=${to}.`)
+    if (to.meta.title) {    // 如果路由配置了标题，则更新网页的title
+        document.title = to.meta.title;
+    } else {
+        document.title = "默认标题";
+    }
+})
+```
+
