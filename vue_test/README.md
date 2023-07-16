@@ -1210,6 +1210,36 @@ router.afterEach((to, from) => {
 
 ### 独享守卫
 
+某一个组件所独享的路由校验
+
+```js
+const router = new VueRouter({
+    routes: [
+        {
+            path: '/home',
+            component: Home,
+            meta: {isAuth:true, title:'zhuye',...},    // meta 里面可以配置路由配置对象的自定义数据
+            beforeEnter: (to, from , next) => {
+                console.log("-->perfrom news beforeEnter: from=", from, ", to=", to, ", next=", next)
+                if (to.meta.isAuth) {
+                    // 如果目标路由配置了 需要认证
+                    console.log("auth path = ", to.fullPath)
+                    if (localStorage.getItem("account") === 'admin') {
+                        // 如果当前缓存的account 是 admin 则跳转
+                        next()
+                    } else {
+                        alert("当前缓存的不是admin账号,暂无权限.")
+                    }
+                } else {
+                    // 没有配置的直接跳转
+                    next()
+                }
+            }
+        },
+        ...
+    ]
+})
+```
 
 ### 组件内守卫
 
