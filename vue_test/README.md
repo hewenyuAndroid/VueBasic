@@ -14,6 +14,8 @@
 注意: 如果下载缓慢可以修改下载镜像，命令如下:
     `npm config set registry https://registry.npm.taobao.org`
 
+> 如果项目同步到github后，然后从github拉到本地，需要先执行 `npm install` 命令才可以 `npm run serve` 运行项目;
+
 
 # 脚手架项目结构
 
