@@ -1243,4 +1243,38 @@ const router = new VueRouter({
 
 ### 组件内守卫
 
+- `beforeRouteEnter`: 通过路由规则，进入该组件时被调用;
+- `beforeRouteLeave`: 通过路由规则，离开组件时被调用;
+
+注意，是写在组件里面的
+
+```js
+<script>
+export default {
+  name: "About",
+  // 通过路由规则，进入该组件时被调用
+  beforeRouteEnter(to, from, next) {
+    console.log("---->perform beforeRouteEnter: from=", from, ", to=", to, ", next=", next);
+    if (to.meta.isAuth) {
+      // 如果目标路由配置了 需要认证
+      console.log("auth path = ", to.fullPath);
+      if (localStorage.getItem("account") === "admin") {
+        // 如果当前缓存的account 是 admin 则跳转
+        next();
+      } else {
+        alert("当前缓存的不是admin账号,暂无权限.");
+      }
+    } else {
+      // 没有配置的直接跳转
+      next();
+    }
+  },
+  // 通过路由规则，离开组件时被调用
+  beforeRouteLeave(to, from, next) {
+    console.log("---->perform beforeRouteLeave: from=", from, ", to=", to, ", next=", next );
+    next();
+  },
+};
+</script>
+```
 
