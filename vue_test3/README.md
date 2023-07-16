@@ -204,5 +204,45 @@ new Proxy(person, {
     - `slots`: 收到的插槽内容，相当于 `this.$slots`.
     - `emit`: 分发自定义事件的函数，相当于 `this.$emit`;
 
+## 7. 计算属性与监视属性
+
+### 计算属性 `computed` 函数
+
+与 `vue2.x` 中的 `computed` 配置功能一致，写法如下:
+```js
+// 1. 导入计算属性
+import { reactive, computed } from "vue";
+
+// 2. 使用计算属性
+let person = reactive({
+    firstName: "zhang",
+    lastName: "san",
+});
+
+// 声明一个计算属性
+// let fullName = computed(() => {
+//   return person.firstName + "-" + person.lastName;
+// });
+
+  // 声明计算属性，然后直接给 person 增加一个属性 (简写方式，只有get)
+/*
+person.fullName = computed(() => {
+    return person.firstName + "-" + person.lastName;
+});
+*/
+
+// 声明计算属性，然后直接给 person 增加一个属性 (完整写法，get/set)
+person.fullName = computed({
+    get() {
+        return person.firstName + "-" + person.lastName;
+    },
+    set(value) {
+        const arr = value.split("-");
+        person.firstName = arr[0];
+        person.lastName = arr[1];
+    },
+});
+```
+
 
 
