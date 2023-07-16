@@ -1292,3 +1292,16 @@ export default {
         1. 地址干净;
         2. 兼容性和 hash 模式相比略差;
         3. 应用部署上线时，需要后端人员支持，解决刷新页面服务端 404 的问题;
+
+# Vue UI组件库
+
+1. 移动端常见UI组件库
+
+    - Vant: https://vant-ui.github.io/vant/#/zh-CN
+    - Cube UI: https://didi.github.io/cube-ui/
+    - Mint UI: http://mint-ui.github.io/#!/zh-cn
+
+2. PC端常见UI组件库
+
+    - Element UI: https://element.eleme.cn/#/zh-CN
+    - IView UI: https://www.iviewui.com/
