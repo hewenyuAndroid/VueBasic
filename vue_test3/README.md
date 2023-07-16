@@ -195,5 +195,14 @@ new Proxy(person, {
     - `ref` 定义的数据: 操作数据需要 `.value`, 读取数据时，模板中直接读取不需要 `.value`;
     - `reactive` 定义的数据: 操作数据与读取数据均不需要 `.value`;
 
+## 6. `setup` 的两个注意点
+
+- `setup` 的执行时机
+    - 在 `beforeCreate()` 之前执行一次，`this` 是 `undefined`;
+- `setup` 的参数
+    - `props`: 值为对象，包含: 组件外部传递过来，但是没有在 `props` 配置中声明的属性，相当于 `this.$attrs`.
+    - `slots`: 收到的插槽内容，相当于 `this.$slots`.
+    - `emit`: 分发自定义事件的函数，相当于 `this.$emit`;
+
 
 
