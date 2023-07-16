@@ -1186,7 +1186,7 @@ router.beforeEach((to, from, next)=>{
     console.log(`perfrom beforeEach, from=${from}, to=${to}, next=${next}.`)
     if (to.meta.isAuth) {
         // 判断路由是否配置了需要校验权限
-        if (localStorage.getItem('account') !== '') {   // 判断本地缓存中是否有账号
+        if (localStorage.getItem('account') === 'admin') {   // 判断本地缓存的账号是否是admin
             next(); // 调用 next() 表示向下执行路由跳转
         } else {
             alert('请先登录')
@@ -1207,4 +1207,10 @@ router.afterEach((to, from) => {
     }
 })
 ```
+
+### 独享守卫
+
+
+### 组件内守卫
+
 
