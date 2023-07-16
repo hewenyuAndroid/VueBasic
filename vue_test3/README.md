@@ -91,4 +91,24 @@ npm run dev
         - 在 `setup` 中，不能访问到 `Vue2.x` 配置 (`data`,`methods`,`computed`...); 
         - 如果有重名 (例如: `data` 中配置了 `name`, `setup` 中也配置了 `name`), 优先使用 `setup` 中的数据;
     - `setup` 不能是一个 `async` 函数，因为返回值不再是 return 对象，而是 `promise`, 模板看不到 `return` 对象中的属性。(后期也可以返回一个 `Promise` 实例，但需要 `Suspense` 和 异步组件的配合)
-    
+
+
+## 2. `ref` 函数
+
+1. 作用: 定义一个响应式数据；
+2. 语法: `const name = ref('zhangsan')`
+    - 创建一个包含响应式数据的 **引用对象** (`reference` 对象，简称 `ref` 对象);
+    - JS中操作数据: `name.value='lisi'`;
+    - 模板中读取数据: 不需要 `name.value` 直接: `<div>{{ name }}</div>`
+
+备注: 
+    - 接收的数据可以是: 基本类型，也可以是对象类型；
+    - 基本类型的数据: 响应式依然是依靠 `Object.defineProperty()` 的 `get` 和 `set` 完成;
+    - 对象类型的数据: 内部 借助了 `Vue3.0` 中的一个新函数 -- `reactive` 函数;
+
+## 3. `reactive` 函数
+
+1. 作用: 定义一个 对象类型 的响应式数据 (基本类型不要用它，要用 ref 函数)
+2. 语法: `const 代理对象 = reactive( 源对象 )` 接收一个对象 (或数组)，返回一个 **代理对象** ( `Proxy` 的实例对象，简称 `proxy` 对象);
+3. `reactive` 定义的响应式数据是 深层次的;
+4. 内部基于 ES6 的 `Proxy` 实现，通过代理对象操作源对象内部数据进行操作;

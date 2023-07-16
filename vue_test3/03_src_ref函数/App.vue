@@ -2,7 +2,7 @@
   <h2>用户信息如下</h2>
   <h3>姓名: {{ name }}</h3>
   <h3>年龄: {{ age }}</h3>
-  <h3>job.typ: {{ job.type }}</h3>
+  <!-- <h3>job.typ: {{ job.type }}</h3> -->
   <button @click="updateInfo">点击修改信息</button>
   <br />
   <br />
@@ -20,8 +20,8 @@ export default {
     let name = ref("zhangsan");
     let age = ref("20");
 
-    // 使用 ref 定义的对象，vue不能感知到对象内部的属性变更
-    let job = ref({ type: "开发", salary: 30000 });
+    // 不能定义对象
+    // let job = ref({ type: "开发", salary: 30000 });
 
     // 定义函数
     function updateInfo() {
@@ -30,16 +30,14 @@ export default {
       age.value = "30";
     }
     function updateJob() {
-      console.log("job=", job);
-      // ref 定义的对象，这里修改完数据，vue无法感知，不会重新解析模板
-      job.type = "测试";
+      // console.log("job=", job);
+      // job.type = "测试";
     }
 
     // 返回对象
     return {
       name,
       age,
-      job,
       updateInfo,
       updateJob,
     };
