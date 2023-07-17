@@ -409,3 +409,21 @@ watch(
 );
 ```
 
+
+### 3. `watchEffect` 函数
+
+- `watch` 的套路是: 既要指明监视的属性，也要指明监视的回调;
+- `watchEffect` 的套路是: 不用指明监视哪个属性，监视的回调中用到了哪个属性，就监视哪个属性;
+- `watchEffect` 有点像 `computed`:
+    - 但 `computed` 注重的计算出来的值 （回调函数的返回值），所以必须要写返回值;
+    - 而 `watchEffect` 更注重的是过程 (回调函数的函数体)，所以不用写返回值;
+```js
+// watchEffect 所指定的回调中用到的数据只要发生变化，则直接重新执行回调;
+watchEffect(() => {
+    // 使用到了sum
+    const a = sum.value;
+    // 这里 job 对象里面的其它字段变更，不会回调这个函数
+    const b = job.members.count;
+    console.log("watchEffect() 所指定的回调执行了");
+});
+```
