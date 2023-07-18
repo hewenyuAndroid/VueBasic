@@ -427,3 +427,52 @@ watchEffect(() => {
     console.log("watchEffect() 所指定的回调执行了");
 });
 ```
+
+## 8. 生命周期
+
+- `Vue2`生命周期
+![Vue2生命周期](./img/lifecycle_vue_2.png)
+
+- `Vue3`生命周期
+![Vue3生命周期](./img/lifecycle_vue_3.png)
+
+
+- `Vue3` 中可以继续使用 `Vue2`中的生命周期钩子，但是有两个被更名；
+    1. `beforeDestroy()  ->  beforeUnmount()`
+    2. `destroyed()  ->  unmounted()`
+- `Vue3` 也提供了 `Composition API` 形式的生命周期钩子, 与 `Vue2` 中钩子的对应关系如下:
+    - `beforeCreate  ->  setup()`
+    - `created  ->  setup()`
+    - `beforeMount  ->  onBeforeMount()`
+    - `mounted  ->  onMounted()`
+    - `beforeUpdate  ->  onBeforeUpdate()`
+    - `updated  ->  onUpdated()`
+    - `beforeDestroy 不再触发` -> `beforeUnmount  ->  onBeforeUnmount()`
+    - `destroy 不再触发` -> `unmounted  ->  onUnmounted()`
+
+备注:
+1. `Vue2` 中的钩子，在 `Vue3` 中也可以使用;
+2. 如果组合`API` 跟 `vue2` 的生命周期钩子重复了，则 两个生命周期钩子都会执行，且组合`API` 会优先执行;
+
+```js
+// 回调顺序如下:
+perfrom setup() // 组合式api回调
+perfrom vue2 created.
+perfrom vue2 beforeCreate.
+perfrom api onBeforeMount   // 组合式api回调
+perfrom vue2 beforeMount.
+perfrom api onMounted   // 组合式api回调
+perfrom vue2 mounted.
+perfrom api onBeforeUpdate  // 组合式api回调
+perform vue2 beforeUdpate
+perfrom api onUpdated   // 组合式api回调
+perform vue2 updated
+perfrom api onBeforeUnmount // 组合式api回调
+perform vue2 beforeUnmount
+perfrom api onUnmounted // 组合式api回调
+perform vue2 unmounted
+```
+
+    
+
+
