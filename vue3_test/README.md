@@ -484,4 +484,11 @@ perform vue2 unmounted
 优势: 复用代码，让 `setup` 中的逻辑简化，易懂;
     
 
+## 10. `toRef` 和 `toRefs` 函数
+
+1. 作用: 创建一个 `ref` 对象，其 `value` 值指向另一个对象中的某个属性;
+2. 语法: `const name = toRef(person, 'name)` 、`const x = toRefs(person)`; 
+3. 应用: 要将响应式数据中的一个 或 几个 属性单独提供给外部使用时;
+4. 扩展: `toRefs` 与 `toRef` 功能一致，但是可以批量创建多个 `ref` 对象; (注意: `toRefs` 只能解析一层对象)
+
 
