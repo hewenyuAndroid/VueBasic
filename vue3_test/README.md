@@ -473,6 +473,15 @@ perfrom api onUnmounted // 组合式api回调
 perform vue2 unmounted
 ```
 
+## 9. 自定义 `hook` 函数
+
+> 什么是 `hook`?
+
+本质是一个函数，把 `setup` 函数中使用的 `Componsition API` 进行了封装; (将用到的数据，函数，生命周期钩子统一放到一个js的函数中)
+
+类似于 `vue2` 中的 `mixin`;
+
+优势: 复用代码，让 `setup` 中的逻辑简化，易懂;
     
 
 
