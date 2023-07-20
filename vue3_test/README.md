@@ -492,3 +492,16 @@ perform vue2 unmounted
 4. 扩展: `toRefs` 与 `toRef` 功能一致，但是可以批量创建多个 `ref` 对象; (注意: `toRefs` 只能解析一层对象)
 
 
+# 3. 其它 `Composition API`
+
+## 1. `shallowReactive` 与 `shallowRef`
+
+- `shallowReactive`: 只处理对象最外层属性的响应式 （浅响应式）;
+- `shallowRef`: 只处理基本数据类型的响应式，不进行对象的响应式处理;
+
+> 什么时候用?
+
+- 如果有一个对象数据，结构比较深，但变化时，只是外层属性变化 --> `shallowReactive`
+- 如果有一个对象数据，后续功能不会修改对象中的属性，而是创建新的对象来应用 --> `shallowRef`
+
+
