@@ -590,4 +590,7 @@ export default {
 };
 </script>
 ```
+## 5. `provide` 与 `inject`
+
+
 
