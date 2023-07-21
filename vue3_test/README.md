@@ -618,3 +618,11 @@ setup() {
     return { person }
 }
 ```
+
+## 6. 响应式数据的判断
+
+- `isRef`: 判断一个数据是否为 `ref` 对象;
+- `isReactive`: 判断一个对象是否是由 `reaceive` 创建的响应式代理;
+- `isReadonly`: 判断一个对象是否是由 `readonly` 创建的只读代理;
+- `isProxy`: 判断一个对象是否是由 `reaceive` 或 `readonly` 方法创建的代理;
+
