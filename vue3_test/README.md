@@ -592,5 +592,29 @@ export default {
 ```
 ## 5. `provide` 与 `inject`
 
+![provide与inject](./img/provide与inject.jpg)
 
+1. 作用: 实现层级组件之间的的通信;
+2. 如何使用: 父组件有一个 `provide` 选项来提供数据，后台组件有一个 `inject` 选项来获取这些数据;
+3. 代码实现:
+- 父组件中:
+```js
+import { reactive, provide } from 'vue'
 
+setup() {
+    // 定义数据
+    let person = reactive({ name:'zhangsan', age:20 });
+    // 使用 provide 传递数据
+    provide('person', person);
+    return { person };
+}
+```
+- 后代组件中:
+```js
+import { provide, inject } from 'vue'
+
+setup() {
+    let person = inject('person');
+    return { person }
+}
+```
