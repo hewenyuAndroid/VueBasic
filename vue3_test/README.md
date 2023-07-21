@@ -505,3 +505,41 @@ perform vue2 unmounted
 - 如果有一个对象数据，后续功能不会修改对象中的属性，而是创建新的对象来应用 --> `shallowRef`
 
 
+## 2. `readonly` 与 `shallowReadonly`
+
+- `readonly`: 让一个响应式数据变为只读的 (深只读: 包含属性对象的属性也是只读的);
+- `shallowReadonly`: 让一个响应式数据变为只读的 (浅只读: 只有直接属性是只读的，属性对象的属性依然是可读可写的);
+- 使用数据: 组件给外部提供数据，但是不希望数据被外部修改时;
+
+注意: `shallowReadonly` 返回的对象，修改属性的属性时，修改的是原始的数据对象的值;
+```js
+let job = reactive({
+    members: {
+        count: 0;
+    }
+})
+
+let shallowReadonlyJob = shallowReadonly(job);
+shallowReadonlyJob.members.count++;
+// 此时这里相当于 job.members.count++
+```
+
+## 3. `toRaw` 与 `markRaw`
+
+- `toRaw`:
+    - 作用: 将一个 `reactive` 生成的 响应式对象 转为普通对象;
+    - 使用场景: 用于读取响应式对象对应的普通对象，对这个普通对象的所有操作，不会引起页面更新;
+- `markRaw`:
+    - 作用: 标记一个对象，使其永远不会再成为 响应式对象;
+    - 使用场景:
+        1. 有些值不应被设置为响应式的，例如: 复杂的第三方类库等;
+        2. 当渲染具有**不可变数据源**的大列表时，跳过响应式转换可以提高性能;
+
+## 4. `customRef`
+
+- 作用: 创建一个自定义的 `ref`，并对其依赖项追踪和更新触发进行显示控制;
+- 实现防抖效果:
+```vue
+
+```
+
