@@ -534,7 +534,7 @@ shallowReadonlyJob.members.count++;
     - 使用场景:
         1. 有些值不应被设置为响应式的，例如: 复杂的第三方类库等;
         2. 当渲染具有**不可变数据源**的大列表时，跳过响应式转换可以提高性能;
-        
+
 注意: `toRaw`、`markRaw` 标记的对象为非响应式数据，数据依然可以被修改，只是不重新解析模板，如果修改数据后，其它内容触发了模板重新解析，此时会将最新的数据刷新到模板中;
 
 ## 4. `customRef`
@@ -542,6 +542,52 @@ shallowReadonlyJob.members.count++;
 - 作用: 创建一个自定义的 `ref`，并对其依赖项追踪和更新触发进行显示控制;
 - 实现防抖效果:
 ```vue
+<template>
+  <input type="text" v-model="keywords" />
+  <h2>{{ keywords }}</h2>
+</template>
 
+<script>
+import { ref, customRef } from "vue";
+export default {
+  name: "App",
+  setup() {
+    // 使用 vue 提供的默认响应式数据
+    // let keywords = ref("hello");
+
+    // 自定义ref
+    function myRef(value) {
+      let timer;
+      return customRef((track, trigger) => {
+        return {
+          get() {
+            console.log(`perform myRef get, value=${value}`);
+            // get() 函数中必须调用 trace() 来表明需要捕获 value 数据的变更，此时才会在数据变更时，通知模板解析
+            track();
+            return value; // 返回value
+          },
+          set(newValue) {
+            console.log(`perform myRef set, newValue=${newValue}`);
+            // // 接收数据
+            // value = newValue;
+            // // 通知vue重新解析模板
+            // trigger();
+
+            // 延迟并防抖更新页面
+            clearTimeout(timer);
+            timer = setTimeout(() => {
+              value = newValue;
+              trigger();
+            }, 1000);
+          },
+        };
+      });
+    }
+    // 使用自定义的 myRef 创建响应式数据
+    let keywords = myRef("hello");
+    return { keywords };
+  },
+};
+</script>
 ```
 
