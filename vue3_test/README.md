@@ -643,3 +643,29 @@ setup() {
 ![CompositionApi](./img/compositionApi.gif)
 
 ![CompositionApi Update](./img/compositionApiUpdate.gif)
+
+# 新的组件
+
+## 1. `Fragment`
+
+- 在 `Vue2.x` 中，组件必须有一个跟标签;
+- 在 `Vue3` 中，组件可以没有根标签，内部会将多个标签包含在一个 `Fragment` 虚拟元素中; (减少标签层级，减少内存占用)
+
+## 2. `Teleport`
+
+`Teleport` 是一个能够给将我们的 组件html结构 移动到指定位置的技术;
+
+```html
+<!--
+    移动的位置可以是css选择器，也可以是 body 这种
+-->
+<teleport to="移动位置">
+    <div v-if="isShow" class="mask">
+        <div class="dialog">
+            <h3>弹窗标题</h3>
+            <button @click="isShow=false">关闭弹窗</button>
+        </div>
+    </div>
+</teleport>
+```
+
