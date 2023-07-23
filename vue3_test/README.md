@@ -626,3 +626,20 @@ setup() {
 - `isReadonly`: 判断一个对象是否是由 `readonly` 创建的只读代理;
 - `isProxy`: 判断一个对象是否是由 `reaceive` 或 `readonly` 方法创建的代理;
 
+# `Componsition API` 的优势
+
+- `Options API` 存在的问题 (`Vue2.x`)
+
+使用传统 `Options API` 中，新增/修改一个需求，就需要在 `data`、`methods`、`computed`里面修改;
+
+![OptionsAPI](./img/optionsApi.gif)
+
+![OptionsAPI Update](./img/optionsApiUpdate.gif)
+
+
+- `Composition API` 的优势;
+使用 `Composition API` 可以更加优雅的组织代码，函数。让相关功能代码更加有序的组织在一起;
+
+![CompositionApi](./img/compositionApi.gif)
+
+![CompositionApi Update](./img/compositionApiUpdate.gif)
