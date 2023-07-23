@@ -669,3 +669,35 @@ setup() {
 </teleport>
 ```
 
+## 3. `Suspense`
+
+- 等待异步组件时渲染一些额外的内容，让应用有更好的体验；
+- 使用步骤:
+    - 异步引入组件:
+    ```js
+    // 静态引入 defineAsyncComponent 函数
+    import { defineAsyncComponent } from 'vue'
+    // 动态引入组件
+    // const Child = defineAsyncComponent(()=>{ return import('./components/Child.Vue') })
+    // 简写
+    const Child = defineAsyncComponent(() => import('./components/Child.vue'))
+    ```
+    - 使用 `Suspense` 包裹组件，并配置好 `default` 与 `fallback` （具名插槽）
+    ```html
+    <template>
+        <div class="app">
+            <h3>我是App组件</h3>
+            <Suspense>
+                <template v-slot:default>
+                    <!-- default 插槽中使用目标数据填充，这里数据可能会有延迟 -->
+                    <Child />
+                </template>
+                <template v-slot:fallback>
+                    <!-- fallback 插槽，在default没有成功返回时显示 -->
+                    <h3>加载中...</h3>
+                </template>
+            </Suspense>
+        </div>
+    </template>
+    ```
+
